@@ -17,14 +17,27 @@
             content: "";
             display: table;
             clear: both;
+            height:100%;
+            width:100%;
+        }
+
+        #left {
+        width: 25%;
+        height:100%;
+        background-color: grey;
+        }
+
+        #right {
+        width: 75%;
+        height:100%;
+        background-color: whitesmoke;
         }
 
     </style>
-
 </head>
 <body>
     <div class="row">
-        <div class="column">
+        <div class="column" id="left">
             <h1>MELO CHAT</h1>
                 <br><br>
             <h1>Users Online:</h1>
@@ -33,18 +46,17 @@
                 <li>User 2</li>
                 <li>...</li>
             </ul>
-            <hr>
+            
             <H1>Rooms avalaible:</H1>
-            <ul>
+            <ul class="list">
                 <li>Room 1</li>
                 <li>...</li>
                 <li>...</li>
             </ul>
         </div>
-        <div class = "vertical"></div>
-        <div class="column">
+        <div class="column" id="right">
             <H1>Messages:</H1>
-            <ul>
+            <ul class="list">
                 <li>Messages</li>
                 <li>...</li>
                 <li>...</li>
