@@ -1,4 +1,4 @@
-const chatForm = document.getElementById('form-log');
+
 const socket = io();
 let urlParams = new URLSearchParams(window.location.search);
 let userName = urlParams.get("username");
