@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        .column {
+            float: left;
+            width: 50%;
+        }
+
+        /* Clear floats after the columns */
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+    </style>
+
+</head>
+<body>
+    <div class="row">
+        <div class="column">
+            <h1>MELO CHAT</h1>
+                <br><br>
+            <h1>Users Online:</h1>
+            <ul>
+                <li>User 1</li>
+                <li>User 2</li>
+                <li>...</li>
+            </ul>
+            <hr>
+            <H1>Rooms avalaible:</H1>
+            <ul>
+                <li>Room 1</li>
+                <li>...</li>
+                <li>...</li>
+            </ul>
+        </div>
+        <div class = "vertical"></div>
+        <div class="column">
+            <H1>Messages:</H1>
+            <ul>
+                <li>Messages</li>
+                <li>...</li>
+                <li>...</li>
+            </ul>
+        </div>
+      </div> 
+</body>
+</html>
