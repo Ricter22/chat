@@ -1,3 +1,4 @@
+const chatForm = document.getElementById('form-log');
 const socket = io();
 
 socket.on('message', message => {
