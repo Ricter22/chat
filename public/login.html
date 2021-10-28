@@ -5,6 +5,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+
+    <style>
+        a.button {
+        -webkit-appearance: button;
+        -moz-appearance: button;
+        appearance: button;
+
+        text-decoration: none;
+        color: initial;
+        }
+    </style>
+
 </head>
 <body>
     <h1>MELO</h1>
@@ -13,7 +25,8 @@
         <fieldset style="width:0px"><legend>Login</legend><br>
             <label>Username</label><br>
             <input type="text"><br><br>
-            <input type="button" value="Join!">
+            <a href="homePage.html" class="button">Join</a>
+
         </fieldset>
     </form>
     <script src="/socket.io/socket.io.js"></script>
