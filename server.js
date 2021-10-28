@@ -17,12 +17,12 @@ io.on('connection', socket => { //socket is a parameter
     //Welcome current user
     socket.emit('message', 'Welcome to a chat');
     
-    //Broadcast when a user connects    
-    socket.broadcast.emit('message', 'A user has joined the chat'); //it notifies me when 
-                                                                    //someone different than me connects
-    //io.emit is for all clients in general
+    //Broadcast when a user connects
+    //it notifies me when someone different than me connects
+    socket.broadcast.emit('message', 'A user has joined the chat'); 
     
     //Runs when client disconnect
+    //io.emit is for all clients in general
     socket.on('disconnect', () => {
         io.emit('message', 'A user has left the chat');
     });
