@@ -1,10 +1,21 @@
 const chatForm = document.getElementById('form-log');
 const socket = io();
+let urlParams = new URLSearchParams(window.location.search);
+let userName = urlParams.get("username");
+let userContainer = document.querySelector("#user");
 
 socket.on('message', (message) => {
     console.log(message); //the messages that we emit from the server are catched here
     outPut(message);
+    outPutUsername(userName);
 }); 
+
+function outPutUsername(username){
+    const p = document.createElement('p');
+    p.classList.add('meta');
+    p.innerText = username;
+    userContainer.appendChild(p);
+}
 
 function outPut(message){
     //creating the div
