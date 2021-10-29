@@ -14,26 +14,29 @@
 
 <body>
     <div class="row">
+
+        <!-- Left side -->
         <div class="column" id="left">
             <h1>MELO CHAT</h1>
                 <br><br>
+                <!-- Users section -->
             <h1>Users Online:</h1>
-            <ul class="list" id="usersAvalaible">
-                <div id="user"></div>
-            </ul>
+            <ul class="list" id="usersAvalaible"></ul>
             
+            <!-- Rooms section -->
             <H1>Rooms avalaible:</H1>
             <ul class="list" id="roomsAvalaible"></ul>
         </div>
+
         <div class="column" id="right">
             <H1>Messages:</H1>
             <div class="messages"></div>
-            
-            <div class="InputGroup">
-                <div class="inputContainer">
+
+            <div class="inputContainer">
+                <form class="chatForm">
                     <input type="text" placeholder="Type here..." class="inputMsg">
                     <input type="submit" value="Send" class="inputButton">
-                </div>
+                </form>
             </div>
         </div>
       </div> 
