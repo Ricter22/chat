@@ -12,22 +12,38 @@ a.button {
 }
 
 /* Clear floats after the columns */
-.row:after {
+.row {
     content: "";
-    display: table;
+    /*display: table;*/
+    display: flex;
     clear: both;
-    height:100%;
-    width:100%;
+    background-color: red;
+    height: 100%;
+    width: 100%;
 }
 
 #left {
 width: 25%;
-height:100%;
+height: 100%;
 background-color: grey;
 }
 
 #right {
 width: 75%;
-height:100%;
-background-color: whitesmoke;
+height: 100%;
+background-color: blue;
 }
+
+html, body {
+    margin:0px;
+    height:100%;
+}
+
+.inputMsg{
+    width: 90%;   
+}
+.inputButton{
+    width: 8%;
+}
+
+
