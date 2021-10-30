@@ -19,27 +19,34 @@ const users = [];
 // Run when client connects
 io.on('connection', socket => { //socket is a parameter    
     //Welcome current user
-    socket.emit('message', msg={
-        username: 'admin',
-        text: 'Welcome to MELO chat!',
-        time: moment().format('h:mm a')
-    });
-    
-    //Broadcast when a user connects
-    //it notifies me when someone different than me connects
-    socket.broadcast.emit('message', msg={
-        username: 'admin',
-        text: 'Somebody has joined the chat!',
-        time: moment().format('h:mm a')
-    }); 
-    
-    //Runs when client disconnect
-    //io.emit is for all clients in general
-    socket.on('disconnect', () => {
-        io.emit('message', msg={
+
+    //mettere tutto qui dentro per usare username!!!
+    socket.on('joinUser', userName =>{
+        users.push(userName);
+        io.emit('user', users);
+
+        socket.emit('message', msg={
             username: 'admin',
-            text: 'Somebody has left the chat!',
+            text: 'Welcome to MELO chat!',
             time: moment().format('h:mm a')
+        });
+        
+        //Broadcast when a user connects
+        //it notifies me when someone different than me connects
+        socket.broadcast.emit('message', msg={
+            username: 'admin',
+            text: userName + ' has joined the chat!',
+            time: moment().format('h:mm a')
+        }); 
+        
+        //Runs when client disconnect
+        //io.emit is for all clients in general
+        socket.on('disconnect', () => {
+            io.emit('message', msg={
+                username: 'admin',
+                text: userName + ' has left the chat!',
+                time: moment().format('h:mm a')
+            });
         });
     });
 
@@ -49,11 +56,7 @@ io.on('connection', socket => { //socket is a parameter
         io.emit('message', msg);
     })
 
-    //mettere tutto qui dentro per usare username!!!
-    socket.on('joinUser', userName =>{
-        users.push(userName);
-        io.emit('user', users);
-    });
+    
 });
 
 
