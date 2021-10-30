@@ -8,6 +8,11 @@
     <title>Melo Chat Server</title>
     <link rel="icon" href="/images/chaticon.ico">
     <link rel="stylesheet" href="/css/homePageStyle.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap" rel="stylesheet"> 
+
     <!--<link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/font-awesome.min.css">-->
 </head>
@@ -17,19 +22,23 @@
 
         <!-- Left side -->
         <div class="column" id="left">
-            <h1>MELO CHAT</h1>
-                <br><br>
+            <h1 class='title'>MELO CHAT</h1>
+    
                 <!-- Users section -->
-            <h1>Users Online:</h1>
-            <ul class="list" id="usersAvalaible"></ul>
+            <div class=usersSection>
+                <h3 class='title'>Users Online:</h3>
+                <select multiple name="options[]" id="usersAvalaible"></select>
+            </div>
             
             <!-- Rooms section -->
-            <H1>Rooms avalaible:</H1>
-            <ul class="list" id="roomsAvalaible"></ul>
+            <div class = roomsSection>
+                <h3 class='title'>Rooms avalaible:</h3>
+                <ul class="list" id="roomsAvalaible"></ul>
+            </div>
         </div>
 
         <div class="column" id="right">
-            <H1>Messages:</H1>
+            <h1 class='title'>Messages:</H1>
             <div class="messages"></div>
 
             <div class="inputContainer">

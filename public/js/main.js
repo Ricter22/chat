@@ -10,6 +10,8 @@ const usersOnline = document.getElementById('usersAvalaible');
 socket.on('message', (msg) => {
     console.log(msg); //the messages that we emit from the server are catched here
     outPut(msg);
+
+    document.querySelector('.messages').scrollTop = document.querySelector('.messages').scrollHeight;
 }); 
 
 //I have the username and send it to the server
@@ -43,10 +45,10 @@ chatform.addEventListener('submit', (e) => {
 function outPutUsername(users){
     usersOnline.innerHTML = '';
     users.forEach((username) => {
-        const li = document.createElement('li');
-        li.classList.add('onUsers');
-        li.innerText = username;
-        usersOnline.appendChild(li);
+        const option = document.createElement('option');
+        option.classList.add('onUsers');
+        option.innerText = username;
+        usersOnline.appendChild(option);
     });
 }
 
