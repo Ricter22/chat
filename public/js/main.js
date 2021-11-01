@@ -74,6 +74,19 @@ function outPutUsername(users){
     });
 }
 
+/*onMessage(content) {  private messaging attempt under construction
+    if (this.selectedUser) {
+      socket.emit("private message", {
+        content,
+        to: this.selectedUser.userID,
+      });
+      this.selectedUser.messages.push({
+        content,
+        fromSelf: true,
+      });
+    }
+  }*/
+
 function outPut(msg){
     //message = userName + ' ' + message;
 
