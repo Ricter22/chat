@@ -6,16 +6,22 @@ let userContainer = document.querySelector("#user");
 const chatform = document.getElementById('chatForm');
 const usersOnline = document.getElementById('usersAvalaible');
 
+const user = {
+    username: userName,
+    id: ''
+};
+
 //listening for a message from the server
 socket.on('message', (msg) => {
     console.log(msg); //the messages that we emit from the server are catched here
     outPut(msg);
 
+    //scroll down the message list
     document.querySelector('.messages').scrollTop = document.querySelector('.messages').scrollHeight;
 }); 
 
 //I have the username and send it to the server
-socket.emit('joinUser', userName);
+socket.emit('joinUser', user);
 
 //receiving the update list of online users
 socket.on('user', users => {
@@ -40,15 +46,34 @@ chatform.addEventListener('submit', (e) => {
     e.target.elements.inputMsg.focus();
 })
 
+//Adding a listener to the users list, so when you click on a user
+//displayed, you'll be able to send a private message to him grabbing
+//the id
+usersOnline.addEventListener('click', (e)=>{
+    //e.preventDefault();
+    const isButton = e.target.nodeName === 'BUTTON';
+    if (!isButton) {
+        return;
+    }
+
+    console.log(e.target.id);
+
+    //From the clicked button I can get the username
+    
+})
+
 //creates the html objects with the list of usernames
 //in future change username with user objects
 function outPutUsername(users){
     usersOnline.innerHTML = '';
-    users.forEach((username) => {
-        const option = document.createElement('option');
-        option.classList.add('onUsers');
-        option.innerText = username;
-        usersOnline.appendChild(option);
+    users.forEach((user) => {
+        const btn = document.createElement('button');
+        btn.classList.add('userBtn');
+        btn.setAttribute('id', user.id);
+        btn.innerText = user.username;
+        usersOnline.appendChild(btn);
+        const br = document.createElement('br');
+        usersOnline.appendChild(br);
     });
 }
 
@@ -75,4 +100,6 @@ function outPut(msg){
     paraText.innerText = msg.text;
     div.appendChild(paraText);
     document.querySelector('.messages').appendChild(div);
+    const br = document.createElement('br');
+    document.querySelector('.messages').appendChild(br);
 }

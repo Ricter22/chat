@@ -38,16 +38,14 @@ html, body {
     height:100%;
 }
 
-.inputMsg{
-    width: 90%;   
+#inputMsg{
+    width: 79%;   
 }
 .inputButton{
-    width: 7%;
+    width: 9%;
 }
-
-.onUsers {
-    border: 1px solid black;
-    border-collapse: collapse;
+#multimedia{
+    width: 9%;
 }
 
 .message {
@@ -55,13 +53,26 @@ html, body {
     border: 1px solid #7b4cd9;
     border-collapse: collapse;
     background-color:#310c7a;
+    font-size: 13px;
+
 }
 
 .roomsSection{
     height: 30%;
+    max-height: 30%;
+    overflow: hidden;
+    overflow-y: scroll;
 }
+
+ul, li{
+    color: white;
+}
+
 .usersSection{
     height: 30%;
+    max-height: 30%;
+    overflow: hidden;
+    overflow-y: scroll;
 }
 
 h1, h3, option, p{
@@ -69,7 +80,7 @@ h1, h3, option, p{
 }
 
 .inputContainer{
-    width: 500px;
+    width: 100%;
 }
 
 select{
@@ -88,4 +99,21 @@ select{
     font-family: 'Gloria Hallelujah', cursive;
 }
 
+.meta, .text{
+    padding-left: 10px;
+}
+
+.userBtn{
+    color: white;
+    font-size: 20px;
+    background: none;
+    border: none;
+    transition-duration: 0.4s;
+    padding: 3px;
+    padding-left: 10px;
+}
+
+.userBtn:hover{
+    background-color: #11021f;
+}
 

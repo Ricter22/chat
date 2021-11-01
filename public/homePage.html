@@ -11,7 +11,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap" rel="stylesheet">
 
     <!--<link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/font-awesome.min.css">-->
@@ -23,32 +23,53 @@
         <!-- Left side -->
         <div class="column" id="left">
             <h1 class='title'>MELO CHAT</h1>
-    
-                <!-- Users section -->
-            <div class=usersSection>
-                <h3 class='title'>Users Online:</h3>
-                <select multiple name="options[]" id="usersAvalaible"></select>
-            </div>
+
+            <!-- Users section -->
+            <h3 class='title'>Users Online:</h3>
+            <div class=usersSection id="usersAvalaible"></div>
             
             <!-- Rooms section -->
+            <h3 class='title'>Rooms avalaible:</h3>
             <div class = roomsSection>
-                <h3 class='title'>Rooms avalaible:</h3>
-                <ul class="list" id="roomsAvalaible"></ul>
+                
+                <div class="rooms-list">
+                    <ul class="list" id="roomsAvalaible">
+                        <li><input type="submit" value="Prova"></li>
+                        <li>Room 1</li>
+                        <li>Room 1</li>
+                        <li>Room 1</li>
+                        <li>Room 1</li>
+                        <li>Room 1</li>
+                        <li>Room 1</li>
+                        <li>Room 1</li>
+                        <li>Room 1</li>
+                        <li>Room 1</li>
+                        <li>Room 1</li>
+                        <li>Room 1</li>
+                        <li>Room 1</li>
+                        <li>Room 1</li>
+                    </ul>
+                </div>
             </div>
         </div>
 
         <div class="column" id="right">
             <h1 class='title'>Messages:</H1>
+
             <div class="messages"></div>
 
             <div class="inputContainer">
                 <form id="chatForm">
+                    <!-- Input bar -->
                     <input type="text" placeholder="Type here..." id="inputMsg">
                     <input type="submit" value="Send" class="inputButton">
+
+                    <!--default html file upload button-->
+                    <input type="file" id="multimedia" value="Media"/>
                 </form>
             </div>
         </div>
-      </div> 
+      </div>
 
 
     <script src="/socket.io/socket.io.js"></script>

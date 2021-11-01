@@ -4,8 +4,6 @@ const express = require('express');
 const socketio = require('socket.io');
 const moment = require('moment');
 
-//This is a comment
-
 const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
@@ -18,13 +16,14 @@ const users = [];
 
 // Run when client connects
 io.on('connection', socket => { //socket is a parameter    
-    //Welcome current user
 
     //mettere tutto qui dentro per usare username!!!
-    socket.on('joinUser', userName =>{
-        users.push(userName);
+    socket.on('joinUser', user =>{
+        user.id = socket.id;
+        users.push(user);
         io.emit('user', users);
 
+        //Welcome current user
         socket.emit('message', msg={
             username: 'admin',
             text: 'Welcome to MELO chat!',
@@ -35,7 +34,7 @@ io.on('connection', socket => { //socket is a parameter
         //it notifies me when someone different than me connects
         socket.broadcast.emit('message', msg={
             username: 'admin',
-            text: userName + ' has joined the chat!',
+            text: user.username + ' has joined the chat!',
             time: moment().format('h:mm a')
         }); 
         
@@ -44,7 +43,7 @@ io.on('connection', socket => { //socket is a parameter
         socket.on('disconnect', () => {
             io.emit('message', msg={
                 username: 'admin',
-                text: userName + ' has left the chat!',
+                text: user.username + ' has left the chat!',
                 time: moment().format('h:mm a')
             });
         });
