@@ -11,10 +11,13 @@ socket.on('message', (message) => {
 }); 
 
 function outPutUsername(username){
+    const div = document.createElement('div');
+    div.classList.add('user');
+    document.appendChild(div);
     const p = document.createElement('p');
     p.classList.add('meta');
     p.innerText = username;
-    userContainer.appendChild(p);
+    div.appendChild(p);
 }
 
 function outPut(message){
