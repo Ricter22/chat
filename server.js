@@ -17,7 +17,7 @@ const { users, newUserList, removedUserList} = require('./utils/users.js');
 // Run when client connects
 io.on('connection', socket => { //socket is a parameter    
 
-    //mettere tutto qui dentro per usare username!!!
+    //!!
     socket.on('joinUser', user =>{
         user.id = socket.id;
         
