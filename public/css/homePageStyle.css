@@ -8,26 +8,84 @@ a.button {
 
 .column {
     float: left;
-    width: 50%;
 }
 
 /* Clear floats after the columns */
-.row:after {
+.row {
     content: "";
-    display: table;
+    /*display: table;*/
+    display: flex;
     clear: both;
-    height:100%;
-    width:100%;
+    background-color: red;
+    height: 100%;
+    width: 100%;
 }
 
 #left {
 width: 25%;
-height:100%;
-background-color: grey;
+height: 100%;
+background-color: #200752;
 }
 
 #right {
 width: 75%;
-height:100%;
-background-color: whitesmoke;
+height: 100%;
+background-color: #100030;
 }
+
+html, body {
+    margin:0px;
+    height:100%;
+}
+
+.inputMsg{
+    width: 90%;   
+}
+.inputButton{
+    width: 7%;
+}
+
+.onUsers {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+.message {
+    border-radius: 20px;
+    border: 1px solid #7b4cd9;
+    border-collapse: collapse;
+    background-color:#310c7a;
+}
+
+.roomsSection{
+    height: 30%;
+}
+.usersSection{
+    height: 30%;
+}
+
+h1, h3, option, p{
+    color: white;
+}
+
+.inputContainer{
+    width: 500px;
+}
+
+select{
+    width: 100%;
+    height: 70%;
+    background-color: #310c7a;
+}
+
+.messages{
+    height:475px;
+    max-height: 475px;
+    overflow: scroll;
+}
+
+.title{
+    font-family: 'Gloria Hallelujah', cursive;
+}
+
+
