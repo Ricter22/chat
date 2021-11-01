@@ -2,7 +2,7 @@ const path = require('path');
 const http = require('http');
 const express = require('express');
 const socketio = require('socket.io');
-const moment = require('moment');
+const moment = require('moment'); //time library
 
 const app = express();
 const server = http.createServer(app);
