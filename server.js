@@ -48,9 +48,9 @@ io.on('connection', socket => { //socket is a parameter
                 time: moment().format('h:mm a')
             });
 
+            //When a user disconnects, its username disappears from the list
             const index = users.indexOf(user);
             users.splice(index, 1);
-
             io.emit('user', users);
 
         });
