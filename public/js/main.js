@@ -8,12 +8,14 @@ const usersOnline = document.getElementById('usersAvalaible');
 
 const user = {
     username: userName,
-    id: ''
+    id: '',
+    room: "room"
 };
 
 //listening for a message from the server
 socket.on('message', (msg) => {
-    console.log(msg); //the messages that we emit from the server are catched here
+    console.log(msg);
+    console.log(user); //the messages that we emit from the server are catched here
     outPut(msg);
     
     //scroll down the message list
@@ -57,8 +59,13 @@ usersOnline.addEventListener('click', (e)=>{
     }
 
     console.log(e.target.id);
+    document.querySelector('.messages').innerHTML="";
+    socket.emit('message', {
+        content : "hello amigo", 
+        to: e.target.id
+    });
+    outPut("Hello");
 
-    //From the clicked button I can get the username
 })
 
 function outPutUsername(users){
