@@ -15,6 +15,7 @@ const user = {
 socket.on('message', (msg) => {
     console.log(msg); //the messages that we emit from the server are catched here
     outPut(msg);
+    
 
     //scroll down the message list
     document.querySelector('.messages').scrollTop = document.querySelector('.messages').scrollHeight;
