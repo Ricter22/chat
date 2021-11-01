@@ -9,19 +9,19 @@
     <link rel="stylesheet" href="/css/homePageStyle.css">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    <script type="text/javascript" src="/utils/users.js"></script>
+
 </head>
 <body>
     <h1>MELO</h1>
     <br>
+    <h2> Log in: </h2>
     <form id="form-log" action="homePage.html" class="border p-3 form">
-        <h2> Log in: </h2>
-        <div class="form-group">
             <label for="username-input"> Username: </label>
-            <input type="text" class="form-control" id="username-input" name="username" placeholder="Username">
-        </div>
-        <div class="col-md">
-            <input type="submit" id="username-text" value="Log in" class="btn btn-primary"/>
-        </div>
+            <input type="text" class="form-control" id="usernameInput" name="username" placeholder="Username">
+            <br><br>
+            <input type="submit" id="usernamebtn" value="Log in" class="btn btn-primary"/>
     </form>
 </body>
 </html>

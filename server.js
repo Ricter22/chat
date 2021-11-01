@@ -45,11 +45,27 @@ io.on('connection', socket => { //socket is a parameter
         //joining a new room
         socket.on("new room", room =>{
             socket.leave(user.room);
+
+            io.to(user.room).emit('message', msg={
+                username: 'admin',
+                text: user.username + ' has left the room',
+                time: moment().format('h:mm a')
+            })
+
             user.room = room;
             socket.join(user.room);
+
             socket.emit('message', msg={
                 username: 'admin',
-                text: 'Welcome to '+ room,
+                text: 'Welcome to '+ user.room,
+                time: moment().format('h:mm a')
+            });
+
+            //Broadcast when a user connects
+            //it notifies me when someone different than me connects
+            socket.broadcast.to(user.room).emit('message', msg={
+                username: 'admin',
+                text: user.username + ' has joined ' + user.room,
                 time: moment().format('h:mm a')
             });
         })
