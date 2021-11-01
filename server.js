@@ -42,6 +42,25 @@ io.on('connection', socket => { //socket is a parameter
             time: moment().format('h:mm a')
         }); 
 
+        //joining a new room
+        socket.on("new room", room =>{
+            socket.leave(user.room);
+            user.room = room;
+            socket.join(user.room);
+            socket.emit('message', msg={
+                username: 'admin',
+                text: 'Welcome to '+ room,
+                time: moment().format('h:mm a')
+            });
+        })
+
+        //listen for chat messages
+        socket.on('chatMessage', msg =>{
+        msg.time = moment().format('h:mm a');
+        io.to(user.room).emit('message', msg);
+        })
+
+
         //Runs when client disconnect
         //io.emit is for all clients in general
         socket.on('disconnect', () => {
@@ -58,12 +77,7 @@ io.on('connection', socket => { //socket is a parameter
         });
     });
 
-    //listen for chat messages
-    socket.on('chatMessage', msg =>{
-        msg.time = moment().format('h:mm a');
-        io.emit('message', msg);
-    })
-
+    
     
 });
 

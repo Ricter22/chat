@@ -64,10 +64,6 @@ html, body {
     overflow-y: scroll;
 }
 
-ul, li{
-    color: white;
-}
-
 .usersSection{
     height: 30%;
     max-height: 30%;
@@ -103,7 +99,7 @@ select{
     padding-left: 10px;
 }
 
-.userBtn{
+.userBtn, .roomsBtn{
     color: white;
     font-size: 20px;
     background: none;
@@ -113,7 +109,9 @@ select{
     padding-left: 10px;
 }
 
-.userBtn:hover{
+.userBtn:hover, .roomsBtn:hover{
     background-color: #11021f;
 }
+
+
 

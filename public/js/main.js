@@ -5,6 +5,7 @@ const userName = urlParams.get("username");
 let userContainer = document.querySelector("#user");
 const chatform = document.getElementById('chatForm');
 const usersOnline = document.getElementById('usersAvalaible');
+const roomsOnline = document.getElementById('roomsAvalaible');
 
 const user = {
     username: userName,
@@ -61,6 +62,21 @@ usersOnline.addEventListener('click', (e)=>{
     console.log(e.target.id);
     const id = e.target.id;
     socket.emit('private', id);
+    document.querySelector('.messages').innerHTML="";
+})
+
+//Adding a listener to the rooms list, so when you click on a list
+//displayed, you'll be able to join the room and send messages
+roomsOnline.addEventListener('click', (e)=>{
+    //e.preventDefault();
+    const isButton = e.target.nodeName === 'BUTTON';
+    if (!isButton) {
+        return;
+    }
+
+    console.log(e.target.id);
+    const room = e.target.id;
+    socket.emit("new room", room);
     document.querySelector('.messages').innerHTML="";
 })
 
