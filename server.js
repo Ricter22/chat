@@ -41,7 +41,7 @@ io.on('connection', socket => { //socket is a parameter
             text: user.username + ' has joined the chat!',
             time: moment().format('h:mm a')
         }); 
-        
+
         //Runs when client disconnect
         //io.emit is for all clients in general
         socket.on('disconnect', () => {

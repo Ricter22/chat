@@ -59,13 +59,9 @@ usersOnline.addEventListener('click', (e)=>{
     }
 
     console.log(e.target.id);
+    const id = e.target.id;
+    socket.emit('private', id);
     document.querySelector('.messages').innerHTML="";
-    socket.emit('message', {
-        content : "hello amigo", 
-        to: e.target.id
-    });
-    outPut("Hello");
-
 })
 
 function outPutUsername(users){
