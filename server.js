@@ -11,8 +11,8 @@ const io = socketio(server);
 // Set static folder
 app.use(express.static(path.join(__dirname, 'public')));
 
-//users list
-const users = [];
+const { users, newUserList, removedUserList} = require('./utils/users.js');
+
 
 // Run when client connects
 io.on('connection', socket => { //socket is a parameter    
@@ -20,7 +20,8 @@ io.on('connection', socket => { //socket is a parameter
     //mettere tutto qui dentro per usare username!!!
     socket.on('joinUser', user =>{
         user.id = socket.id;
-        users.push(user);
+        
+        newUserList(user);
         io.emit('user', users);
 
         //Welcome current user
@@ -48,9 +49,7 @@ io.on('connection', socket => { //socket is a parameter
                 time: moment().format('h:mm a')
             });
 
-            //When a user disconnects, its username disappears from the list
-            const index = users.indexOf(user);
-            users.splice(index, 1);
+            removedUserList(user);
             io.emit('user', users);
 
         });
