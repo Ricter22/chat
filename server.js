@@ -17,8 +17,11 @@ const { users, newUserList, removedUserList} = require('./utils/users.js');
 // Run when client connects
 io.on('connection', socket => { //socket is a parameter    
 
-    //!!
+    //put everything inside to use the user scope
     socket.on('joinUser', user =>{
+
+        socket.join(user.room);
+
         user.id = socket.id;
         
         newUserList(user);
@@ -33,17 +36,17 @@ io.on('connection', socket => { //socket is a parameter
         
         //Broadcast when a user connects
         //it notifies me when someone different than me connects
-        socket.broadcast.emit('message', msg={
+        socket.broadcast.to(user.room).emit('message', msg={
             username: 'admin',
             text: user.username + ' has joined the chat!',
             time: moment().format('h:mm a')
         }); 
-        
+
         //Runs when client disconnect
         //io.emit is for all clients in general
         socket.on('disconnect', () => {
             
-            io.emit('message', msg={
+            io.to(user.room).emit('message', msg={
                 username: 'admin',
                 text: user.username + ' has left the chat!',
                 time: moment().format('h:mm a')
