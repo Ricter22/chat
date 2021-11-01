@@ -16,7 +16,6 @@ socket.on('message', (msg) => {
     console.log(msg); //the messages that we emit from the server are catched here
     outPut(msg);
     
-
     //scroll down the message list
     document.querySelector('.messages').scrollTop = document.querySelector('.messages').scrollHeight;
 }); 
@@ -60,11 +59,8 @@ usersOnline.addEventListener('click', (e)=>{
     console.log(e.target.id);
 
     //From the clicked button I can get the username
-    
 })
 
-//creates the html objects with the list of usernames
-//in future change username with user objects
 function outPutUsername(users){
     usersOnline.innerHTML = '';
     users.forEach((user) => {
