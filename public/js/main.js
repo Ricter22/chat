@@ -32,6 +32,10 @@ socket.on('user', users => {
     outPutUsername(users);
 })
 
+socket.on('privConnection', msg =>{
+    alert(msg);
+})
+
 // creating a listener on the chat form
 chatform.addEventListener('submit', (e) => {
     e.preventDefault();

@@ -61,13 +61,51 @@ io.on('connection', socket => { //socket is a parameter
                 time: moment().format('h:mm a')
             });
 
-            //Broadcast when a user connects
-            //it notifies me when someone different than me connects
             socket.broadcast.to(user.room).emit('message', msg={
                 username: 'admin',
                 text: user.username + ' has joined ' + user.room,
                 time: moment().format('h:mm a')
             });
+        })
+
+        //private messaging
+        socket.on('private', id =>{
+
+            //searching the user using the id
+            let us = '';
+            users.forEach(usr => {
+                if (usr.id === id){
+                    us = usr;
+                }
+            });
+
+            //leaving the old room
+            socket.leave(user.room);
+            io.to(user.room).emit('message', msg={
+                username: 'admin',
+                text: user.username + ' has left the room',
+                time: moment().format('h:mm a')
+            })
+
+            //checking if the receiver is already in the private room or not
+            if (us.room === us.username+user.username){
+                user.room = us.username+user.username;
+                socket.join(user.room);
+            }
+            else{
+                user.room = user.username+us.username;
+                socket.join(user.room);
+            }
+
+            socket.to(id).emit('privConnection', msg= user.username + " wants to chat with you!");
+
+            socket.broadcast.to(user.room).emit('message', msg={
+                username: 'admin',
+                text: user.username + ' has joined the private chat',
+                time: moment().format('h:mm a')
+            });
+
+            console.log(us.username + ' ' + us.room);
         })
 
         //listen for chat messages
