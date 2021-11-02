@@ -1,4 +1,3 @@
-
 const socket = io();
 let urlParams = new URLSearchParams(window.location.search);
 const userName = urlParams.get("username");
@@ -61,6 +60,7 @@ usersOnline.addEventListener('click', (e)=>{
 
     console.log(e.target.id);
     const id = e.target.id;
+    alert(id);
     socket.emit('private', id);
     document.querySelector('.messages').innerHTML="";
 })
