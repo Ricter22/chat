@@ -1,7 +1,23 @@
-Hi!
+<img src="chat/public/uploads/logo.png"/>
 
-This project aims to be a real chat server with socket connections.
-We are using Node.js and Socket.io technologies so that the communication is in real time.
-Later on, we will use this Readme.md file for the documentation of the project.
+Melo Chat Server is a real time message-delivery application with socket connections.
+We are a Node.js based application that helps you get in touch with your contacts
+in a very easy and fast way. At the moment, we can run on all browsers and we offer
+a set of different functionalities:
+
+  - Global chat
+  - Rooms chats
+  - Private chats
+
+In order to be compliant with a fast communication in real time we have decided to 
+use Socket.io, a library that enables Client-Server communication: https://socket.io/docs/v4/
+This library is very useful along with the Node.js environment because of the number
+of events sent in a very short time space. 
+We also have used Express for a better performance: https://expressjs.com/es/api.html
+And finally, we have also made use of the Moment library so that the messages can
+be displayed with a well formatted timestamp: https://momentjs.com/docs/
+
+<img src="chat/public/uploads/MCS Component Diagram.png"/>
+<img src="chat/public/uploads/MCS Sequence Diagram.png"/>
 
 --Riccardo Terranzi and Juan Emilio Ordóñez Márquez
