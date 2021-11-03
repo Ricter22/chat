@@ -1,4 +1,0 @@
-How can we do it so that 2 users cannot have the same username?//
-How can we display the messages in private chats?//
-Add a room attribute to the user so that when we click a user, the name of the room
-changes and the message only emits to that room.//

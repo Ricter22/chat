@@ -23,6 +23,7 @@
         <!-- Left side -->
         <div class="column" id="left">
             <h1 class='title'>MELO CHAT</h1>
+            <button type="button" id="exit-btn" onclick=window.location.href="index.html">Exit 🚪</button>  
 
             <!-- Users section -->
             <h3 class='title'>Users Online:</h3>
@@ -42,18 +43,24 @@
         </div>
 
         <div class="column" id="right">
-            <h1 class='title'>Messages:</H1>
-
+            <div id="top-right">  
+                <h1 class='title'>Messages:</H1>  
+            </div>  
             <div class="messages"></div>
 
             <div class="inputContainer">
                 <form id="chatForm">
                     <!-- Input bar -->
                     <input type="text" placeholder="Type here..." id="inputMsg">
-                    <input type="submit" value="Send" class="inputButton">
-
-                    <!--default html file upload button-->
-                    <input type="file" id="multimedia" value="Media"/>
+                    <input type="submit" value="💬" class="inputButton">
+                    <!--default html file upload button
+                    <input type="file" id="multimedia" value="Media">
+                    <form id="form">
+                        <input type="file" id="f" />
+                        <button type="submit">📁</button>
+                         for upload progress
+                        <div id="upload-progress"></div>
+                    </form> -->
                 </form>
             </div>
         </div>
