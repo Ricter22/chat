@@ -1,0 +1,11 @@
+1) Easier learning curve
+    -single language for backend and frontend
+    -doesn't require deep technical knowledge
+    -easy to build a real time application
+
+2) Moment and Nodemon
+
+3) Continuous 2-way communication
+    -quick response
+    -quick communication between server and client
+    -quick communication with many clients
