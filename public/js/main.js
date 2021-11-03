@@ -46,7 +46,9 @@ chatform.addEventListener('submit', (e) => {
 
     //creating the message object and sending it to the server
     const msg = {username:userName, text:msgText, time:''};
-    socket.emit('chatMessage', msg);
+    if (msg.text != ''){
+        socket.emit('chatMessage', msg);
+    }
 
     // Clear input
     e.target.elements.inputMsg.value = '';
@@ -111,6 +113,7 @@ function outPutUsername(users){
   }*/
 
 function outPut(msg){
+    
     //message = userName + ' ' + message;
 
     //creating the div
@@ -135,4 +138,5 @@ function outPut(msg){
     document.querySelector('.messages').appendChild(div);
     const br = document.createElement('br');
     document.querySelector('.messages').appendChild(br);
+    
 }
