@@ -6,6 +6,10 @@ a.button {
     color: initial;
 }
 
+#exit-btn{
+    float: right;
+}
+
 .column {
     float: left;
 }

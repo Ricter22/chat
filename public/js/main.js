@@ -6,6 +6,7 @@ const chatform = document.getElementById('chatForm');
 const usersOnline = document.getElementById('usersAvalaible');
 const roomsOnline = document.getElementById('roomsAvalaible');
 
+
 const user = {
     username: userName,
     id: '',
