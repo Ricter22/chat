@@ -14,8 +14,8 @@ const user = {
 
 //listening for a message from the server
 socket.on('message', (msg) => {
-    console.log(msg);
-    console.log(user); //the messages that we emit from the server are catched here
+    //console.log(msg); used for debugging
+    //console.log(user); used for debugging
     outPut(msg);
     
     //scroll down the message list
@@ -37,11 +37,11 @@ socket.on('privConnection', msg =>{
 
 // creating a listener on the chat form
 chatform.addEventListener('submit', (e) => {
-    e.preventDefault();
+    e.preventDefault(); //we don't want the page to refresh so that the messages stay on screen
 
     //getting the text of the message
     const msgText = e.target.elements.inputMsg.value;
-    console.log(msgText);
+    //console.log(msgText);
 
     //creating the message object and sending it to the server
     const msg = {username:userName, text:msgText, time:''};
@@ -62,9 +62,9 @@ usersOnline.addEventListener('click', (e)=>{
         return;
     }
 
-    console.log(e.target.id);
+    //console.log(e.target.id); used for debugging
     const id = e.target.id;
-    alert(id);
+    //alert(id); we don't want to show the id of the user
     socket.emit('private', id);
     document.querySelector('.messages').innerHTML="";
 })
@@ -78,7 +78,7 @@ roomsOnline.addEventListener('click', (e)=>{
         return;
     }
 
-    console.log(e.target.id);
+    //console.log(e.target.id);
     const room = e.target.id;
     socket.emit("new room", room);
     document.querySelector('.messages').innerHTML="";
@@ -96,19 +96,6 @@ function outPutUsername(users){
         usersOnline.appendChild(br);
     });
 }
-
-/*onMessage(content) {  private messaging attempt under construction
-    if (this.selectedUser) {
-      socket.emit("private message", {
-        content,
-        to: this.selectedUser.userID,
-      });
-      this.selectedUser.messages.push({
-        content,
-        fromSelf: true,
-      });
-    }
-  }*/
 
 function outPut(msg){
     //message = userName + ' ' + message;
