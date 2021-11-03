@@ -3,9 +3,7 @@ const http = require('http');
 const express = require('express');
 const socketio = require('socket.io');
 const moment = require('moment'); //time library
-//var siofu = require("socketio-file-upload");
 
-//const app = express().use(siofu.router);
 const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
@@ -13,6 +11,7 @@ const io = socketio(server);
 // Set static folder
 app.use(express.static(path.join(__dirname, 'public')));
 
+//importing functions for managing users
 const { users, newUserList, removedUserList} = require('./utils/users.js');
 
 
@@ -22,10 +21,14 @@ io.on('connection', socket => { //socket is a parameter
     //put everything inside to use the user scope
     socket.on('joinUser', user =>{
 
+        //joining the global room
         socket.join(user.room);
 
+        //defining the id parameter of the user
         user.id = socket.id;
         
+        //adding the new user to the list 
+        //and emitting the updated list to client
         newUserList(user);
         io.emit('user', users);
 
@@ -48,21 +51,27 @@ io.on('connection', socket => { //socket is a parameter
         socket.on("new room", room =>{
             socket.leave(user.room);
 
+            //notification for a user that leaves a room, 
+            //but doesn't disconnect
             io.to(user.room).emit('message', msg={
                 username: 'admin',
                 text: user.username + ' has left the room',
                 time: moment().format('h:mm a')
             })
 
+            //changing the room parameter of the user and 
+            //joining the new room
             user.room = room;
             socket.join(user.room);
 
+            //welcoming the new user in the room
             socket.emit('message', msg={
                 username: 'admin',
                 text: 'Welcome to '+ user.room,
                 time: moment().format('h:mm a')
             });
 
+            //emitting to users of a room that a new users joined the room
             socket.broadcast.to(user.room).emit('message', msg={
                 username: 'admin',
                 text: user.username + ' has joined ' + user.room,
@@ -90,6 +99,7 @@ io.on('connection', socket => { //socket is a parameter
             })
 
             //checking if the receiver is already in the private room or not
+            //and depending on that join a room or another
             if (us.room === us.username+user.username){
                 user.room = us.username+user.username;
                 socket.join(user.room);
@@ -99,15 +109,18 @@ io.on('connection', socket => { //socket is a parameter
                 socket.join(user.room);
             }
 
+            //notification for the user that somebody is trying to contact him
+            //in a private chat
             socket.to(id).emit('privConnection', msg= user.username + 
             " wants to chat with you!\nClick its username to start chatting privately(if it hasn't already joined you)!");
 
+            //notification for a user that the other user is in the private chat
             socket.broadcast.to(user.room).emit('message', msg={
                 username: 'admin',
                 text: user.username + ' has joined the private chat',
                 time: moment().format('h:mm a')
             });
-            console.log(us.username + ' ' + us.room);
+        
         })
 
         //listen for chat messages
@@ -126,6 +139,7 @@ io.on('connection', socket => { //socket is a parameter
                 time: moment().format('h:mm a')
             });
 
+            //updating the list and sending it back to client
             removedUserList(user);
             io.emit('user', users);
 

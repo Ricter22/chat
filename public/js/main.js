@@ -6,22 +6,13 @@ const chatform = document.getElementById('chatForm');
 const usersOnline = document.getElementById('usersAvalaible');
 const roomsOnline = document.getElementById('roomsAvalaible');
 
-
+//defining object user
+//we'll fill id in the server
 const user = {
     username: userName,
     id: '',
     room: "room"
 };
-
-//listening for a message from the server
-socket.on('message', (msg) => {
-    //console.log(msg); used for debugging
-    //console.log(user); used for debugging
-    outPut(msg);
-    
-    //scroll down the message list
-    document.querySelector('.messages').scrollTop = document.querySelector('.messages').scrollHeight;
-}); 
 
 //I have the username and send it to the server
 socket.emit('joinUser', user);
@@ -32,6 +23,47 @@ socket.on('user', users => {
     outPutUsername(users);
 })
 
+//listening for a message from the server
+socket.on('message', (msg) => {
+    outPut(msg);
+    
+    //scroll down the message list
+    document.querySelector('.messages').scrollTop = document.querySelector('.messages').scrollHeight;
+}); 
+
+//Adding a listener to the rooms list, so when you click on a list
+//displayed, you'll be able to join the room and send messages
+roomsOnline.addEventListener('click', (e)=>{
+    //e.preventDefault();
+    const isButton = e.target.nodeName === 'BUTTON';
+    if (!isButton) {
+        return;
+    }
+
+    //console.log(e.target.id);
+    const room = e.target.id;
+    socket.emit("new room", room);
+    document.querySelector('.messages').innerHTML="";
+})
+
+//Adding a listener to the users list, so when you click on a user
+//displayed, you'll be able to send a private message to him grabbing
+//the id
+usersOnline.addEventListener('click', (e)=>{
+    //e.preventDefault();
+    const isButton = e.target.nodeName === 'BUTTON';
+    if (!isButton) {
+        return;
+    }
+
+    //console.log(e.target.id); used for debugging
+    const id = e.target.id;
+    //alert(id); we don't want to show the id of the user
+    socket.emit('private', id);
+    document.querySelector('.messages').innerHTML="";
+})
+
+//listening for a private connection 
 socket.on('privConnection', msg =>{
     alert(msg);
 })
@@ -55,38 +87,7 @@ chatform.addEventListener('submit', (e) => {
     e.target.elements.inputMsg.focus();
 })
 
-//Adding a listener to the users list, so when you click on a user
-//displayed, you'll be able to send a private message to him grabbing
-//the id
-usersOnline.addEventListener('click', (e)=>{
-    //e.preventDefault();
-    const isButton = e.target.nodeName === 'BUTTON';
-    if (!isButton) {
-        return;
-    }
-
-    //console.log(e.target.id); used for debugging
-    const id = e.target.id;
-    //alert(id); we don't want to show the id of the user
-    socket.emit('private', id);
-    document.querySelector('.messages').innerHTML="";
-})
-
-//Adding a listener to the rooms list, so when you click on a list
-//displayed, you'll be able to join the room and send messages
-roomsOnline.addEventListener('click', (e)=>{
-    //e.preventDefault();
-    const isButton = e.target.nodeName === 'BUTTON';
-    if (!isButton) {
-        return;
-    }
-
-    //console.log(e.target.id);
-    const room = e.target.id;
-    socket.emit("new room", room);
-    document.querySelector('.messages').innerHTML="";
-})
-
+//function to display the list of users online
 function outPutUsername(users){
     usersOnline.innerHTML = '';
     users.forEach((user) => {
@@ -100,6 +101,7 @@ function outPutUsername(users){
     });
 }
 
+//function to display messages
 function outPut(msg){
     
     //message = userName + ' ' + message;
