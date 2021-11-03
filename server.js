@@ -97,14 +97,14 @@ io.on('connection', socket => { //socket is a parameter
                 socket.join(user.room);
             }
 
-            socket.to(id).emit('privConnection', msg= user.username + " wants to chat with you!");
+            socket.to(id).emit('privConnection', msg= user.username + 
+            " wants to chat with you!\nClick its username to start chatting privately(if it hasn't already joined you)!");
 
             socket.broadcast.to(user.room).emit('message', msg={
                 username: 'admin',
                 text: user.username + ' has joined the private chat',
                 time: moment().format('h:mm a')
             });
-
             console.log(us.username + ' ' + us.room);
         })
 
@@ -113,7 +113,6 @@ io.on('connection', socket => { //socket is a parameter
         msg.time = moment().format('h:mm a');
         io.to(user.room).emit('message', msg);
         })
-
 
         //Runs when client disconnect
         //io.emit is for all clients in general
@@ -130,12 +129,7 @@ io.on('connection', socket => { //socket is a parameter
 
         });
     });
-
-    
-    
 });
 
-
 const PORT = 3000 || process.env.PORT;
-
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
