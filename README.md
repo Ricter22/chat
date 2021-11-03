@@ -17,7 +17,7 @@ We also have used Express for a better performance: https://expressjs.com/es/api
 And finally, we have also made use of the Moment library so that the messages can
 be displayed with a well formatted timestamp: https://momentjs.com/docs/
 
-<img src="/public/uploads/MCS Component Diagram.png"/>
-<img src="/public/uploads/MCS Sequence Diagram.png"/>
+<img src="/public/uploads/MCS Component Diagram.jpg"/>
+<img src="/public/uploads/MCS Sequence Diagram.jpg"/>
 
 --Riccardo Terranzi and Juan Emilio Ordóñez Márquez
