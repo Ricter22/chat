@@ -15,8 +15,20 @@ function removedUserList(user){
     return users;
 }
 
+function isInList(username){
+    users.forEach((user) =>{
+        if(user.username === username){
+            return true;
+        }
+        else {
+            return false;
+        }
+    })
+}
+
 module.exports = {
     removedUserList : removedUserList,
     newUserList : newUserList,
-    users : users
+    users : users,
+    isInList : isInList
 }

@@ -11,9 +11,12 @@ a set of different functionalities:
 
 In order to be compliant with a fast communication in real time we have decided to 
 use Socket.io, a library that enables Client-Server communication: https://socket.io/docs/v4/
+
 This library is very useful along with the Node.js environment because of the number
 of events sent in a very short time space. 
+
 We also have used Express for a better performance: https://expressjs.com/es/api.html
+
 And finally, we have also made use of the Moment library so that the messages can
 be displayed with a well formatted timestamp: https://momentjs.com/docs/
 

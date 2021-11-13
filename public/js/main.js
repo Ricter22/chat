@@ -6,16 +6,13 @@ const chatform = document.getElementById('chatForm');
 const usersOnline = document.getElementById('usersAvalaible');
 const roomsOnline = document.getElementById('roomsAvalaible');
 
-//defining object user
-//we'll fill id in the server
-const user = {
-    username: userName,
-    id: '',
-    room: "room"
-};
+let userP = {username:'', id:'', room:''};
 
-//I have the username and send it to the server
-socket.emit('joinUser', user);
+socket.on('userProperties', user =>{
+    userP.username = user.username;
+    userP.id = user.id;
+    userP.room = user.room;
+})
 
 //receiving the update list of online users
 socket.on('user', users => {
