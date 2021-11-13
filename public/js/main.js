@@ -78,9 +78,8 @@ chatform.addEventListener('submit', (e) => {
 
     //creating the message object and sending it to the server
     const msg = {username:userName, text:msgText, time:''};
-    if (msg.text != ''){
-        socket.emit('chatMessage', msg);
-    }
+    socket.emit('chatMessage', msg);
+    
 
     // Clear input
     e.target.elements.inputMsg.value = '';
