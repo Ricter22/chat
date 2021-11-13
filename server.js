@@ -158,6 +158,10 @@ io.on('connection', socket => { //socket is a parameter
         
         })
 
+        socket.on('binary', bin =>{
+            console.log(bin);
+        })
+
         //listen for chat messages
         socket.on('chatMessage', msg =>{
         msg.time = moment().format('h:mm a');
