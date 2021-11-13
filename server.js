@@ -3,6 +3,7 @@ const http = require('http');
 const express = require('express');
 const socketio = require('socket.io');
 const moment = require('moment'); //time library
+let alert = require('alert');
 
 const app = express();
 const server = http.createServer(app);
@@ -10,23 +11,57 @@ const io = socketio(server);
 
 // Set static folder
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.urlencoded({extended : true}));
+app.use(express.json());
 
 //importing functions for managing users
-const { users, newUserList, removedUserList} = require('./utils/users.js');
+const { users, newUserList, removedUserList, isInList} = require('./utils/users.js');
+
+let usernameFromLogin = '';
+
+app.get('/', function(request, response) {
+	response.sendFile(path.join(__dirname + '/public/login.html'));
+});
+
+app.post('/auth', function(request, response) {
+    var username = request.body.username;
+    console.log(users);
+    let flag = false;
+
+    for(i = 0; i<users.length; i++){
+        if (users[i].username == username){
+            flag = true;
+        }
+    }
+
+    console.log(flag);
+
+    if(flag){
+        alert("Invalid username");
+        response.redirect('login.html');
+    }
+    else{
+            usernameFromLogin = username;
+            response.redirect('homePage.html');
+        }
+});
 
 
 // Run when client connects
 io.on('connection', socket => { //socket is a parameter    
 
-    //put everything inside to use the user scope
-    socket.on('joinUser', user =>{
+
+        const user = {
+            username: usernameFromLogin,
+            id: socket.id,
+            room: "room"
+        };
+
+        socket.emit('userProperties', user);
 
         //joining the global room
         socket.join(user.room);
 
-        //defining the id parameter of the user
-        user.id = socket.id;
-        
         //adding the new user to the list 
         //and emitting the updated list to client
         newUserList(user);
@@ -144,7 +179,7 @@ io.on('connection', socket => { //socket is a parameter
             io.emit('user', users);
 
         });
-    });
+    
 });
 
 const PORT = 3000 || process.env.PORT;

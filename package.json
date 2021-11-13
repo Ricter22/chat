@@ -10,6 +10,7 @@
   "author": "Juan Emilio Ordóñez Márquez & Ricardo Terranzi",
   "license": "ISC",
   "dependencies": {
+    "alert": "^5.0.10",
     "express": "^4.17.1",
     "moment": "^2.29.1",
     "socket.io": "^4.3.1",

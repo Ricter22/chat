@@ -9,17 +9,19 @@
     <link rel="stylesheet" href="/css/homePageStyle.css">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/font-awesome.min.css">
+    <script src="/js/log.js"></script>
 </head>
 <body>
     <h1>MELO</h1>
     <br>
     <h2> Log in: </h2>
-    <form id="form-log" action="homePage.html" class="border p-3 form">
-            <label for="username-input"> Username: </label>
-            <input type="text" class="form-control" id="usernameInput" name="username" placeholder="Username">
+    <form id="form-log" action="auth" method='post' class="border p-3 form">
+            <label for="username-input" > Username: </label>
+            <input type="text" class="form-control" id="usernameInput" name="username" placeholder="Username" required>
             <br><br>
             <input type="submit" id="usernamebtn" value="Log in" class="btn btn-primary"/>
     </form>
     <script src="/socket.io/socket.io.js"></script>
+    <!--  <script src="/socket.io/socket.io.js"></script>  -->
 </body>
 </html>
