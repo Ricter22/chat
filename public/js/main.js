@@ -1,3 +1,5 @@
+//import {Buffer} from 'buffer';
+
 const socket = io();
 let urlParams = new URLSearchParams(window.location.search);
 const userName = urlParams.get("username");
@@ -5,6 +7,7 @@ let userContainer = document.querySelector("#user");
 const chatform = document.getElementById('chatForm');
 const usersOnline = document.getElementById('usersAvalaible');
 const roomsOnline = document.getElementById('roomsAvalaible');
+const multimedia = document.getElementById('multimedia');
 
 let userP = {username:'', id:'', room:''};
 
@@ -126,3 +129,14 @@ function outPut(msg){
     document.querySelector('.messages').appendChild(br);
     
 }
+
+multimedia.addEventListener('change', (e)=>{
+    const file = multimedia.files[0];
+    let bin;
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function(e){
+        console.log(reader.result);
+        socket.emit('binary', bin = reader.result);
+    }
+})
