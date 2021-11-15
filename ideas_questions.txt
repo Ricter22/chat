@@ -1,7 +1,7 @@
-How can we do it so that 2 users cannot have the same username?
-Add an exit button.//
 Wait for the other person to accept the private messaging before deleting the 
 messages from the global room.
 Add a feature that allows the user to create a room.
 Sending multimedia files.
 User x is typing... feature.
+How can we fix the diagrams?
+Which db should we use?
