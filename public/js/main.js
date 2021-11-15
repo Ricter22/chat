@@ -68,6 +68,33 @@ socket.on('privConnection', msg =>{
     alert(msg);
 })
 
+socket.on('file', bin => {
+    let tag;
+    let dataType  = bin.split('/', 2);
+    let type = dataType[0].split(':', 2);
+    console.log(type[1]);
+
+    switch(type[1]){
+        case 'image': 
+            tag = 'img';
+            console.log(type[1]);
+            break;
+        case 'video':
+            tag = "video";
+            console.log(type[1]);
+            break;
+    }
+
+    const file = document.createElement(tag);
+    file.src = bin;
+    const div = document.createElement('div');
+    div.appendChild(file);
+    document.querySelector('.messages').appendChild(div);
+
+    //let decodedFile = window.atob(bin);
+    //console.log(decodedFile);
+})
+
 // creating a listener on the chat form
 chatform.addEventListener('submit', (e) => {
     e.preventDefault(); //we don't want the page to refresh so that the messages stay on screen

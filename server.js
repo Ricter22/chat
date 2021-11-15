@@ -159,7 +159,7 @@ io.on('connection', socket => { //socket is a parameter
         })
 
         socket.on('binary', bin =>{
-            console.log(bin);
+            io.to(user.room).emit('file', bin);
         })
 
         //listen for chat messages
