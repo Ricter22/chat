@@ -1,13 +1,16 @@
 const path = require('path');
 const http = require('http');
 const express = require('express');
-const socketio = require('socket.io');
+//const socketio = require('socket.io');
 const moment = require('moment'); //time library
 let alert = require('alert');
 
 const app = express();
 const server = http.createServer(app);
-const io = socketio(server);
+//const io = socketio(server);
+const io = require("socket.io")(server, {
+    maxHttpBufferSize: 1e8
+  });
 
 // Set static folder
 app.use(express.static(path.join(__dirname, 'public')));
@@ -159,6 +162,8 @@ io.on('connection', socket => { //socket is a parameter
         })
 
         socket.on('binary', bin =>{
+            bin.time = moment().format('h:mm a');
+            console.log(bin.username);
             io.to(user.room).emit('file', bin);
         })
 

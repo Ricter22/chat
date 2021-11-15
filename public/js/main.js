@@ -69,30 +69,8 @@ socket.on('privConnection', msg =>{
 })
 
 socket.on('file', bin => {
-    let tag;
-    let dataType  = bin.split('/', 2);
-    let type = dataType[0].split(':', 2);
-    console.log(type[1]);
+    displayFiles(bin);
 
-    switch(type[1]){
-        case 'image': 
-            tag = 'img';
-            console.log(type[1]);
-            break;
-        case 'video':
-            tag = "video";
-            console.log(type[1]);
-            break;
-    }
-
-    const file = document.createElement(tag);
-    file.src = bin;
-    const div = document.createElement('div');
-    div.appendChild(file);
-    document.querySelector('.messages').appendChild(div);
-
-    //let decodedFile = window.atob(bin);
-    //console.log(decodedFile);
 })
 
 // creating a listener on the chat form
@@ -104,7 +82,7 @@ chatform.addEventListener('submit', (e) => {
     //console.log(msgText);
 
     //creating the message object and sending it to the server
-    const msg = {username:userName, text:msgText, time:''};
+    const msg = {username:userP.username, text:msgText, time:''};
     socket.emit('chatMessage', msg);
     
 
@@ -130,8 +108,6 @@ function outPutUsername(users){
 //function to display messages
 function outPut(msg){
     
-    //message = userName + ' ' + message;
-
     //creating the div
     const div = document.createElement('div');
     div.classList.add('message');
@@ -157,13 +133,35 @@ function outPut(msg){
     
 }
 
+function displayFiles(bin){
+    const div = document.createElement('div');
+    div.classList.add('message');
+    const p = document.createElement('p');
+    p.innerText = bin.username + ' ' + bin.time;
+    div.appendChild(p);
+    const file = document.createElement('a');    
+    file.href = bin.binary;
+    file.target = "_blank";
+    const image = document.createElement('img');
+    image.classList.add('fileImage');
+    image.src = '/images/files-a.jpg';
+    file.appendChild(image);
+    div.appendChild(file);
+    document.querySelector('.messages').appendChild(div);
+}
+
 multimedia.addEventListener('change', (e)=>{
     const file = multimedia.files[0];
-    let bin;
+    let bin = {
+        username : userP.username,
+        binary : '',
+        time : ''
+    };
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = function(e){
         console.log(reader.result);
-        socket.emit('binary', bin = reader.result);
+        bin.binary = reader.result;
+        socket.emit('binary', bin);
     }
 })
