@@ -1,9 +1,19 @@
 const path = require('path');
+let alert = require('alert');
 const http = require('http');
 const express = require('express');
 //const socketio = require('socket.io');
 const moment = require('moment'); //time library
-let alert = require('alert');
+const mongoose = require('mongoose');
+const mongoDB = 'mongodb+srv://melo_chat:melo_chat@cluster0.finip.mongodb.net/test?retryWrites=true&w=majority';
+mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true}).then(()=>{
+    console.log('Database connected');
+}).catch(err=>{
+    console.log(err);
+    })
+
+const userFromDb = require('./models/userModelDb')
+
 
 const app = express();
 const server = http.createServer(app);
@@ -28,25 +38,45 @@ app.get('/', function(request, response) {
 
 app.post('/auth', function(request, response) {
     var username = request.body.username;
-    console.log(users);
     let flag = false;
-
-    for(i = 0; i<users.length; i++){
+    console.log(username);
+    /*for(i = 0; i<users.length; i++){
         if (users[i].username == username){
             flag = true;
         }
-    }
+    }*/
 
-    console.log(flag);
+    userFromDb.findOne({'username': username}, 'username', function(err, result){
+        if(err){ console.log("Error with the database");};
+        console.log(result);
+        if (result != null){
+            flag = true;
+        }
+        console.log(flag);
+        if(flag){
+            alert("Invalid username");
+            response.redirect('login.html');
+        }
+        else{
+                usernameFromLogin = username;
+                const userSavedInDb = new userFromDb({username:username});
+                userSavedInDb.save();
+                response.redirect('homePage.html');
+            }
+    })
 
-    if(flag){
+    
+
+    /*if(flag){
         alert("Invalid username");
         response.redirect('login.html');
     }
     else{
             usernameFromLogin = username;
+            const userSavedInDb = new userFromDb({username:username});
+            userSavedInDb.save();
             response.redirect('homePage.html');
-        }
+        }*/
 });
 
 
