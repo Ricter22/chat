@@ -68,6 +68,11 @@ socket.on('privConnection', msg =>{
     alert(msg);
 })
 
+socket.on('file', bin => {
+    displayFiles(bin);
+
+})
+
 // creating a listener on the chat form
 chatform.addEventListener('submit', (e) => {
     e.preventDefault(); //we don't want the page to refresh so that the messages stay on screen
@@ -77,7 +82,7 @@ chatform.addEventListener('submit', (e) => {
     //console.log(msgText);
 
     //creating the message object and sending it to the server
-    const msg = {username:userName, text:msgText, time:''};
+    const msg = {username:userP.username, text:msgText, time:''};
     socket.emit('chatMessage', msg);
     
 
@@ -103,8 +108,6 @@ function outPutUsername(users){
 //function to display messages
 function outPut(msg){
     
-    //message = userName + ' ' + message;
-
     //creating the div
     const div = document.createElement('div');
     div.classList.add('message');
@@ -130,13 +133,35 @@ function outPut(msg){
     
 }
 
+function displayFiles(bin){
+    const div = document.createElement('div');
+    div.classList.add('message');
+    const p = document.createElement('p');
+    p.innerText = bin.username + ' ' + bin.time;
+    div.appendChild(p);
+    const file = document.createElement('a');    
+    file.href = bin.binary;
+    file.target = "_blank";
+    const image = document.createElement('img');
+    image.classList.add('fileImage');
+    image.src = '/images/files-a.jpg';
+    file.appendChild(image);
+    div.appendChild(file);
+    document.querySelector('.messages').appendChild(div);
+}
+
 multimedia.addEventListener('change', (e)=>{
     const file = multimedia.files[0];
-    let bin;
+    let bin = {
+        username : userP.username,
+        binary : '',
+        time : ''
+    };
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = function(e){
         console.log(reader.result);
-        socket.emit('binary', bin = reader.result);
+        bin.binary = reader.result;
+        socket.emit('binary', bin);
     }
 })
