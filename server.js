@@ -6,7 +6,7 @@ const express = require('express');
 const moment = require('moment'); //time library
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost:27017/TEST').then(()=>{
-    console.log('Database connected');
+    console.log('Database connected...');
 }).catch(err=>{
     console.log(err);
     })
@@ -35,47 +35,53 @@ app.get('/', function(request, response) {
 	response.sendFile(path.join(__dirname + '/public/login.html'));
 });
 
+app.post('/register', function(request, response){
+    let username = request.body.username;
+    let password = request.body.psw;
+
+    userFromDb.findOne({'username': username, 'password':password}, function(err, result){
+        if(err){ console.log("Error with the database");};
+        console.log(result);
+        
+        if(result!=null){
+            response.redirect('login.html');
+        }
+        else{
+            const userSavedInDb = new userFromDb({username:username, password:password});
+            userSavedInDb.save();
+            response.redirect('login.html');
+        }
+    })
+})
+
 app.post('/auth', function(request, response) {
-    var username = request.body.username;
+    let username = request.body.username;
+    let password = request.body.password;
     let flag = false;
     console.log(username);
-    /*for(i = 0; i<users.length; i++){
-        if (users[i].username == username){
-            flag = true;
-        }
-    }*/
 
-    userFromDb.findOne({'username': username}, 'username', function(err, result){
+    userFromDb.findOne({'username': username, 'password':password}, function(err, result){
         if(err){ console.log("Error with the database");};
         console.log(result);
         if (result != null){
             flag = true;
         }
         console.log(flag);
-        if(flag){
-            alert("Invalid username");
+        if(!flag){
+            alert("Invalid username e/o password");
             response.redirect('login.html');
         }
-        else{
-                usernameFromLogin = username;
-                const userSavedInDb = new userFromDb({username:username});
+        else{   
+                //this will be the procedure for the registration
+                /*usernameFromLogin = username;
+                const userSavedInDb = new userFromDb({username:username, password:password});
                 userSavedInDb.save();
+                response.redirect('homePage.html');*/
+
+                usernameFromLogin = username;
                 response.redirect('homePage.html');
             }
     })
-
-    
-
-    /*if(flag){
-        alert("Invalid username");
-        response.redirect('login.html');
-    }
-    else{
-            usernameFromLogin = username;
-            const userSavedInDb = new userFromDb({username:username});
-            userSavedInDb.save();
-            response.redirect('homePage.html');
-        }*/
 });
 
 
