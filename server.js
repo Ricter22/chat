@@ -5,8 +5,7 @@ const express = require('express');
 //const socketio = require('socket.io');
 const moment = require('moment'); //time library
 const mongoose = require('mongoose');
-const mongoDB = 'mongodb+srv://melo_chat:melo_chat@cluster0.finip.mongodb.net/test?retryWrites=true&w=majority';
-mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true}).then(()=>{
+mongoose.connect('mongodb://localhost:27017/TEST').then(()=>{
     console.log('Database connected');
 }).catch(err=>{
     console.log(err);
