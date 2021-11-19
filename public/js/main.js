@@ -115,6 +115,7 @@ function outPut(msg){
     //creating the first paragraph with time
     //and username
     const p = document.createElement('p');
+    p.style = "color: white;";
     p.classList.add('meta');
     //p.innerText = message.username;
     //p.innerHTML += `<span>${message.time}</span>`;
@@ -124,6 +125,7 @@ function outPut(msg){
     //creating another paragraph to put inside
     //the text of the message
     const paraText = document.createElement('p');
+    paraText.style = "color: white;";
     paraText.classList.add('text');
     paraText.innerText = msg.text;
     div.appendChild(paraText);
