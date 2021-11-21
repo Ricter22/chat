@@ -4,6 +4,7 @@ const http = require('http');
 const express = require('express');
 //const socketio = require('socket.io');
 const moment = require('moment'); //time library
+//Database connection
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost:27017/TEST').then(()=>{
     console.log('Database connected...');
@@ -11,7 +12,8 @@ mongoose.connect('mongodb://localhost:27017/TEST').then(()=>{
     console.log(err);
     })
 
-const userFromDb = require('./models/userModelDb')
+const userFromDb = require('./models/userModelDb');
+const messagesFromDb = require('./models/messagesModelDb');
 
 
 const app = express();
@@ -72,12 +74,6 @@ app.post('/auth', function(request, response) {
             response.redirect('login.html');
         }
         else{   
-                //this will be the procedure for the registration
-                /*usernameFromLogin = username;
-                const userSavedInDb = new userFromDb({username:username, password:password});
-                userSavedInDb.save();
-                response.redirect('homePage.html');*/
-
                 usernameFromLogin = username;
                 response.redirect('homePage.html');
             }
@@ -87,7 +83,6 @@ app.post('/auth', function(request, response) {
 
 // Run when client connects
 io.on('connection', socket => { //socket is a parameter    
-
 
         const user = {
             username: usernameFromLogin,
@@ -203,6 +198,8 @@ io.on('connection', socket => { //socket is a parameter
         })
 
         //listen for chat messages
+        //here I receive the message from the client
+        //so first thing I want to do is to save the message in the database
         socket.on('chatMessage', msg =>{
         msg.time = moment().format('h:mm a');
         io.to(user.room).emit('message', msg);
