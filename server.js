@@ -95,6 +95,13 @@ io.on('connection', socket => { //socket is a parameter
         //joining the global room
         socket.join(user.room);
 
+        //here I want to upload all the previous messages of the room I'm entering
+        messagesFromDb.find({'room': user.room}, function(err, result){
+            //here we send the array of old messages to the client 
+            //so that we can display it
+            socket.emit('oldMessages', result);
+        })
+
         //adding the new user to the list 
         //and emitting the updated list to client
         newUserList(user);
@@ -131,6 +138,14 @@ io.on('connection', socket => { //socket is a parameter
             //joining the new room
             user.room = room;
             socket.join(user.room);
+            socket.emit('userProperties', user);
+
+            //here I want to upload all the previous messages of the room I'm entering
+            messagesFromDb.find({'room': user.room}, function(err, result){
+                //here we send the array of old messages to the client 
+                //so that we can display it
+                socket.emit('oldMessages', result);
+            })
 
             //welcoming the new user in the room
             socket.emit('message', msg={
@@ -176,6 +191,17 @@ io.on('connection', socket => { //socket is a parameter
                 user.room = user.username+us.username;
                 socket.join(user.room);
             }
+            socket.emit('userProperties', user);
+
+            //here I want to upload all the previous messages of the room I'm entering
+            messagesFromDb.find({"$or": [
+                {"room": user.username+us.username}, 
+                {"room": us.username+user.username}
+            ]}, function(err, result){
+                //here we send the array of old messages to the client 
+                //so that we can display it
+                socket.emit('oldMessages', result);
+            })
 
             //notification for the user that somebody is trying to contact him
             //in a private chat
@@ -202,7 +228,12 @@ io.on('connection', socket => { //socket is a parameter
         //so first thing I want to do is to save the message in the database
         socket.on('chatMessage', msg =>{
         msg.time = moment().format('h:mm a');
-        io.to(user.room).emit('message', msg);
+
+        //qui voglio salvare il messaggio nel database
+        const msgSavedInDb = new messagesFromDb({username:msg.username, text:msg.text, time:msg.time, room:user.room});
+        msgSavedInDb.save().then(()=>{
+            io.to(user.room).emit('message', msg);
+            })
         })
 
         //Runs when client disconnect

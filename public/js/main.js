@@ -15,6 +15,7 @@ socket.on('userProperties', user =>{
     userP.username = user.username;
     userP.id = user.id;
     userP.room = user.room;
+    console.log(userP.room);
 })
 
 //receiving the update list of online users
@@ -61,11 +62,19 @@ usersOnline.addEventListener('click', (e)=>{
     //alert(id); we don't want to show the id of the user
     socket.emit('private', id);
     document.querySelector('.messages').innerHTML="";
+    //here the div is empty and I want to populate it with the old messages
 })
 
 //listening for a private connection 
 socket.on('privConnection', msg =>{
     alert(msg);
+})
+
+socket.on("oldMessages", result =>{
+    console.log(result);
+    result.forEach(message => {
+        outPut(message);
+    })
 })
 
 socket.on('file', bin => {
@@ -79,13 +88,11 @@ chatform.addEventListener('submit', (e) => {
 
     //getting the text of the message
     const msgText = e.target.elements.inputMsg.value;
-    //console.log(msgText);
 
     //creating the message object and sending it to the server
     const msg = {username:userP.username, text:msgText, time:''};
     socket.emit('chatMessage', msg);
     
-
     // Clear input
     e.target.elements.inputMsg.value = '';
     e.target.elements.inputMsg.focus();
