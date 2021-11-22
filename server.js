@@ -30,6 +30,7 @@ app.use(express.json());
 
 //importing functions for managing users
 const { users, newUserList, removedUserList, isInList} = require('./utils/users.js');
+const {Parsing} = require('./utils/mexParsing.js');
 
 let usernameFromLogin = '';
 
