@@ -6,7 +6,8 @@ const messagesSchema = new mongoose.Schema({
     text: String,
     time: String,
     //room receiver
-    room: String
+    room: String,
+    countries: Array
     
   });
 

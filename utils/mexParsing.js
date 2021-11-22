@@ -1,16 +1,18 @@
-listLinks = ['https://en.wikipedia.org/wiki/Brazil'];
-
+countries = ['brasil', 'italy', 'spain', 'germany', 'france', 'netherlands', 'uk', 'sweden'];
 
 function Parsing(text){
-    list = [];
+    let list = [];
+    let msg = '';
     words = text.split('@');
-    console.log(words);
+    words.forEach(word =>{
+        msg += word;
+    })
     words.forEach(word => {
-        if (word.toLowerCase == 'brasil'){
+        if (countries.includes(word.toLowerCase())){
             list.push('https://en.wikipedia.org/wiki/' + word);
         }
     })
-    return list;
+    return objects = [list, msg];
 }
 
 

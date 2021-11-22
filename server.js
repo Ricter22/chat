@@ -112,7 +112,8 @@ io.on('connection', socket => { //socket is a parameter
         socket.emit('message', msg={
             username: 'admin',
             text: 'Welcome to MELO chat!',
-            time: moment().format('h:mm a')
+            time: moment().format('h:mm a'),
+            countries: []
         });
         
         //Broadcast when a user connects
@@ -120,7 +121,8 @@ io.on('connection', socket => { //socket is a parameter
         socket.broadcast.to(user.room).emit('message', msg={
             username: 'admin',
             text: user.username + ' has joined the chat!',
-            time: moment().format('h:mm a')
+            time: moment().format('h:mm a'),
+            countries: []
         }); 
 
         //joining a new room
@@ -132,7 +134,8 @@ io.on('connection', socket => { //socket is a parameter
             io.to(user.room).emit('message', msg={
                 username: 'admin',
                 text: user.username + ' has left the room',
-                time: moment().format('h:mm a')
+                time: moment().format('h:mm a'),
+                countries: []
             })
 
             //changing the room parameter of the user and 
@@ -152,14 +155,16 @@ io.on('connection', socket => { //socket is a parameter
             socket.emit('message', msg={
                 username: 'admin',
                 text: 'Welcome to '+ user.room,
-                time: moment().format('h:mm a')
+                time: moment().format('h:mm a'),
+                countries: []
             });
 
             //emitting to users of a room that a new users joined the room
             socket.broadcast.to(user.room).emit('message', msg={
                 username: 'admin',
                 text: user.username + ' has joined ' + user.room,
-                time: moment().format('h:mm a')
+                time: moment().format('h:mm a'),
+                countries: []
             });
         })
 
@@ -179,7 +184,8 @@ io.on('connection', socket => { //socket is a parameter
             io.to(user.room).emit('message', msg={
                 username: 'admin',
                 text: user.username + ' has left the room',
-                time: moment().format('h:mm a')
+                time: moment().format('h:mm a'),
+                countries: []
             })
 
             //checking if the receiver is already in the private room or not
@@ -213,7 +219,8 @@ io.on('connection', socket => { //socket is a parameter
             socket.broadcast.to(user.room).emit('message', msg={
                 username: 'admin',
                 text: user.username + ' has joined the private chat',
-                time: moment().format('h:mm a')
+                time: moment().format('h:mm a'),
+                countries: []
             });
         
         })
@@ -230,8 +237,12 @@ io.on('connection', socket => { //socket is a parameter
         socket.on('chatMessage', msg =>{
         msg.time = moment().format('h:mm a');
 
+        //Parsing the message
+        msg.countries = Parsing(msg.text)[0];
+        msg.text = Parsing(msg.text)[1];
+
         //qui voglio salvare il messaggio nel database
-        const msgSavedInDb = new messagesFromDb({username:msg.username, text:msg.text, time:msg.time, room:user.room});
+        const msgSavedInDb = new messagesFromDb({username:msg.username, text:msg.text, time:msg.time, room:user.room, countries:msg.countries});
         msgSavedInDb.save().then(()=>{
             io.to(user.room).emit('message', msg);
             })
@@ -244,7 +255,8 @@ io.on('connection', socket => { //socket is a parameter
             io.to(user.room).emit('message', msg={
                 username: 'admin',
                 text: user.username + ' has left the chat!',
-                time: moment().format('h:mm a')
+                time: moment().format('h:mm a'),
+                countries: []
             });
 
             //updating the list and sending it back to client

@@ -26,6 +26,7 @@ socket.on('user', users => {
 
 //listening for a message from the server
 socket.on('message', (msg) => {
+    console.log(msg.countries);
     outPut(msg);
     
     //scroll down the message list
@@ -136,6 +137,18 @@ function outPut(msg){
     paraText.classList.add('text');
     paraText.innerText = msg.text;
     div.appendChild(paraText);
+
+    //appending countries links
+    msg.countries.forEach(country => {
+        let link = document.createElement('a');
+        link.innerText = country;
+        link.href = country;
+        link.style = "color: white;";
+        div.appendChild(link);
+        const br = document.createElement('br');
+        div.appendChild(br);
+    })
+    
     document.querySelector('.messages').appendChild(div);
     const br = document.createElement('br');
     document.querySelector('.messages').appendChild(br);
