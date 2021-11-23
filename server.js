@@ -2,6 +2,7 @@ const path = require('path');
 let alert = require('alert');
 const http = require('http');
 const express = require('express');
+const bcrypt = require('bcrypt');
 //const socketio = require('socket.io');
 const moment = require('moment'); //time library
 //Database connection
@@ -28,7 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({extended : true}));
 app.use(express.json());
 
-//importing functions for managing users
+//importing functions for managing users, messages and credentials
 const { users, newUserList, removedUserList, isInList} = require('./utils/users.js');
 const {Parsing} = require('./utils/mexParsing.js');
 
@@ -42,9 +43,8 @@ app.post('/register', function(request, response){
     let username = request.body.username;
     let password = request.body.psw;
 
-    userFromDb.findOne({'username': username, 'password':password}, function(err, result){
+userFromDb.findOne({'username': username/*, 'password':password*/}, function(err, result){
         if(err){ console.log("Error with the database");};
-        console.log(result);
         
         if(result!=null){
             response.redirect('login.html');
@@ -63,21 +63,28 @@ app.post('/auth', function(request, response) {
     let flag = false;
     console.log(username);
 
-    userFromDb.findOne({'username': username, 'password':password}, function(err, result){
+    //here we search the username in the database, if we find it we search 
+    //his encrypted password and compare it with the password that we receive from the post
+    userFromDb.findOne({'username': username}, function(err, result){
         if(err){ console.log("Error with the database");};
-        console.log(result);
-        if (result != null){
-            flag = true;
-        }
-        console.log(flag);
-        if(!flag){
+        
+        if(result==null){
             alert("Invalid username e/o password");
             response.redirect('login.html');
         }
         else{   
-                usernameFromLogin = username;
-                response.redirect('homePage.html');
-            }
+            result.comparePassword(password, function(err, isMatch) {
+                if (err) throw err;
+                //console.log(password, isMatch);
+                if (isMatch){
+                    usernameFromLogin = username;
+                    response.redirect('homePage.html');
+                }else{
+                    alert("Invalid username e/o password");
+                    response.redirect('login.html');
+                }
+            });
+        }
     })
 });
 
