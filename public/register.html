@@ -26,7 +26,9 @@
             <input type="password" placeholder="Enter Password" name="psw" id="psw" required>
 
             <label for="psw-repeat"><b>Repeat Password</b></label>
-            <input type="password" placeholder="Repeat Password" name="psw-repeat" id="psw-repeat" required>
+            <input type="password" placeholder="Repeat Password" name="psw-repeat" id="psw-repeat" required oninput="check(this)">
+            <label for="profile-input" id="profile-label"> <b>Profile pic: </b></label>
+            <input type="file" id="profile-pic">
             <hr>
             <p>By creating an account you agree to our <a href="#">Terms & Privacy</a>.</p>
 
@@ -37,5 +39,16 @@
             <p>Already have an account? <a href="login.html">Sign in</a>.</p>
         </div>
     </form>
+
+    <script language='javascript' type='text/javascript'>
+        function check(input) {
+            if (input.value != document.getElementById('psw').value) {
+                input.setCustomValidity('Password must be matching.');
+            } else {
+                // input is valid -- reset the error message
+                input.setCustomValidity('');
+            }
+        }
+    </script>
 
 </body>
