@@ -3,8 +3,11 @@ const bcrypt = require('bcrypt');
 
 const UserSchema = new mongoose.Schema({
   username: String,
-  password: String
-  
+  password: String,
+  img:{
+    data: Buffer,
+    contentType: String
+  }
 }, {timestamps: true});
 
 //Here we'll do the encryption

@@ -80,7 +80,6 @@ socket.on("oldMessages", result =>{
 
 socket.on('file', bin => {
     displayFiles(bin);
-
 })
 
 // creating a listener on the chat form
@@ -103,13 +102,20 @@ chatform.addEventListener('submit', (e) => {
 function outPutUsername(users){
     usersOnline.innerHTML = '';
     users.forEach((user) => {
+        const userDiv = document.createElement('div');
         const btn = document.createElement('button');
         btn.classList.add('userBtn');
         btn.setAttribute('id', user.id);
         btn.innerText = user.username;
-        usersOnline.appendChild(btn);
-        const br = document.createElement('br');
-        usersOnline.appendChild(br);
+        userDiv.appendChild(btn);
+        const img = document.createElement("img");
+        //if(user.profilePic == null)
+        img.src = "/images/user.png"; img.height = "25"; img.width = "25"; 
+        //else {retrieve img from db}
+        userDiv.appendChild(img);
+        usersOnline.appendChild(userDiv);
+        /*const br = document.createElement('br');
+        usersOnline.appendChild(br);*/
     });
 }
 
