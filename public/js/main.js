@@ -9,12 +9,13 @@ const usersOnline = document.getElementById('usersAvalaible');
 const roomsOnline = document.getElementById('roomsAvalaible');
 const multimedia = document.getElementById('multimedia');
 
-let userP = {username:'', id:'', room:''};
+let userP = {username:'', id:'', room:'', image:''};
 
 socket.on('userProperties', user =>{
     userP.username = user.username;
     userP.id = user.id;
     userP.room = user.room;
+    userP.image = user.image;
     console.log(userP.room);
 })
 
@@ -109,9 +110,13 @@ function outPutUsername(users){
         btn.innerText = user.username;
         userDiv.appendChild(btn);
         const img = document.createElement("img");
-        //if(user.profilePic == null)
-        img.src = "/images/user.png"; img.height = "25"; img.width = "25"; 
-        //else {retrieve img from db}
+        img.height = "25"; img.width = "25";
+        console.log(user.image);
+        if(user.image){
+            img.src = user.image; 
+        }else {
+            img.src = "./images/user.png"; 
+        }
         userDiv.appendChild(img);
         usersOnline.appendChild(userDiv);
         /*const br = document.createElement('br');
@@ -180,6 +185,7 @@ function displayFiles(bin){
 
 multimedia.addEventListener('change', (e)=>{
     const file = multimedia.files[0];
+    console.log(file);
     let bin = {
         username : userP.username,
         binary : '',

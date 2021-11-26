@@ -3,8 +3,8 @@ let alert = require('alert');
 const http = require('http');
 const express = require('express');
 const bcrypt = require('bcrypt');
-const fs = require('fs');
-const userModel = require('./models/userModelDb');
+//const userModel = require('./models/userModelDb');
+const multer = require('multer');
 //const socketio = require('socket.io');
 const moment = require('moment'); //time library
 //Database connection
@@ -20,6 +20,7 @@ mongoose.connect('mongodb://localhost:27017/TEST', {
 
 const userFromDb = require('./models/userModelDb');
 const messagesFromDb = require('./models/messagesModelDb');
+/*const uploadModel = require('./models/imageModelDb');*/
 
 
 const app = express();
@@ -44,11 +45,22 @@ app.get('/', function(request, response) {
 	response.sendFile(path.join(__dirname + '/public/login.html'));
 });
 
-app.post('/register', function(request, response){ //upload.single('image'),
+const Storage = multer.diskStorage({
+    destination: "./public/uploads/",
+    filename:(req,file,cb)=>{
+        cb(null, file.fieldname+"_"+Date.now()+path.extname(file.originalname));
+    }
+});
+
+const upload = multer({
+    storage:Storage
+}).single('file');
+
+app.post('/register', upload, function(request, response){
     let username = request.body.username;
     let password = request.body.psw;
-    //let profilePic = request.body.image;
-
+    let image = request.body.file;
+    
 userFromDb.findOne({'username': username/*, 'password':password*/}, function(err, result){
         if(err){ console.log("Error with the database");};
         
@@ -56,46 +68,12 @@ userFromDb.findOne({'username': username/*, 'password':password*/}, function(err
             response.redirect('login.html');
         }
         else{
-            /*var multer = require('multer');
-  
-            var storage = multer.diskStorage({
-                destination: (req, file, cb) => {
-                    cb(null, 'uploads')
-                },
-                filename: (req, file, cb) => {
-                    cb(null, file.fieldname + '-' + Date.now())
-                }
-            });
-              
-            var upload = multer({ storage: storage });*/
-
-            const userSavedInDb = new userFromDb({username:username, password:password});//profilePic:image
+            const userSavedInDb = new userFromDb({username:username, password:password, image:image});
             userSavedInDb.save();
             response.redirect('login.html');
         }
     })
 });
-
-/*app.post('/register.html', upload.single('image'), (req, res, next) => {
-  
-    var obj = {
-        name: req.body.name,
-        desc: req.body.desc,
-        img: {
-            data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
-            contentType: 'image/png'
-        }
-    }
-    imgModel.create(obj, (err, item) => {
-        if (err) {
-            console.log(err);
-        }
-        else {
-            // item.save();
-            res.redirect('/');
-        }
-    });
-});*/
 
 app.post('/auth', function(request, response) {
     let username = request.body.username;
@@ -136,6 +114,7 @@ io.on('connection', socket => { //socket is a parameter
             username: usernameFromLogin,
             id: socket.id,
             room: "room"
+            /*image: user.image;*/
         };
 
         socket.emit('userProperties', user);
@@ -277,6 +256,10 @@ io.on('connection', socket => { //socket is a parameter
             console.log(bin.username);
             io.to(user.room).emit('file', bin);
         })
+
+        /*socket.on('profilePic', bin =>{
+            bin.t
+        })*/
 
         //listen for chat messages
         //here I receive the message from the client
