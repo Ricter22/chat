@@ -24,8 +24,9 @@ const app = express();
 const server = http.createServer(app);
 //const io = socketio(server);
 const io = require("socket.io")(server, {
-    maxHttpBufferSize: 1e8
+    maxHttpBufferSize: 1e8,
   });
+
 
 // Set static folder
 app.use(express.static(path.join(__dirname, 'public')));
@@ -100,6 +101,14 @@ io.on('connection', socket => { //socket is a parameter
             id: socket.id,
             room: "room"
         };
+
+        socket.on('userConnected', userConnected =>{
+            user.username = userConnected.username;
+            socket.emit('userProperties', user);
+            io.emit('user', users);
+            /*newUserList(user);
+            io.emit('user', users);*/
+        })
 
         socket.emit('userProperties', user);
 
@@ -261,7 +270,6 @@ io.on('connection', socket => { //socket is a parameter
         //Runs when client disconnect
         //io.emit is for all clients in general
         socket.on('disconnect', () => {
-            
             io.to(user.room).emit('message', msg={
                 username: 'admin',
                 text: user.username + ' has left the chat!',
@@ -273,6 +281,7 @@ io.on('connection', socket => { //socket is a parameter
             removedUserList(user);
             io.emit('user', users);
 
+            
         });
     
 });

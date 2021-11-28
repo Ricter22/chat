@@ -1,6 +1,3 @@
-//import {Buffer} from 'buffer';
-
-const socket = io();
 let urlParams = new URLSearchParams(window.location.search);
 const userName = urlParams.get("username");
 let userContainer = document.querySelector("#user");
@@ -9,13 +6,40 @@ const usersOnline = document.getElementById('usersAvalaible');
 const roomsOnline = document.getElementById('roomsAvalaible');
 const multimedia = document.getElementById('multimedia');
 
+const socket = io({
+    'reconnection': true,
+    'reconnectionDelay': 1000,
+    'reconnectionDelayMax' : 5000,
+    'reconnectionAttempts': 5,
+});
+
 let userP = {username:'', id:'', room:''};
+let userAfterCrash = {username:'', id:'', room:''};
+let isConnected = false;
+
+
+socket.on('connect', function () {
+    if(isConnected){
+        console.log("already connected " + userP.username);
+        socket.emit('userConnected', userP);
+    }
+    else{
+        console.log("New connect ");
+    }
+  });
+
+socket.on('disconnect', function () {
+    console.log("disconnect");
+    isConnected = true;
+  });
+
+
 
 socket.on('userProperties', user =>{
     userP.username = user.username;
     userP.id = user.id;
     userP.room = user.room;
-    console.log(userP.room);
+    //userAfterCrash = user;
 })
 
 //receiving the update list of online users
@@ -174,6 +198,7 @@ function displayFiles(bin){
 
 multimedia.addEventListener('change', (e)=>{
     const file = multimedia.files[0];
+    
     let bin = {
         username : userP.username,
         binary : '',
