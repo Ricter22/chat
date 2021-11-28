@@ -39,7 +39,8 @@ socket.on('userProperties', user =>{
     userP.username = user.username;
     userP.id = user.id;
     userP.room = user.room;
-    //userAfterCrash = user;
+    userP.image = user.image;
+    console.log(userP.room);
 })
 
 //receiving the update list of online users
@@ -104,7 +105,6 @@ socket.on("oldMessages", result =>{
 
 socket.on('file', bin => {
     displayFiles(bin);
-
 })
 
 // creating a listener on the chat form
@@ -127,13 +127,24 @@ chatform.addEventListener('submit', (e) => {
 function outPutUsername(users){
     usersOnline.innerHTML = '';
     users.forEach((user) => {
+        const userDiv = document.createElement('div');
         const btn = document.createElement('button');
         btn.classList.add('userBtn');
         btn.setAttribute('id', user.id);
         btn.innerText = user.username;
-        usersOnline.appendChild(btn);
-        const br = document.createElement('br');
-        usersOnline.appendChild(br);
+        userDiv.appendChild(btn);
+        const img = document.createElement("img");
+        img.height = "25"; img.width = "25";
+        console.log(user.image);
+        if(user.image){
+            img.src = user.image; 
+        }else {
+            img.src = "./images/user.png"; 
+        }
+        userDiv.appendChild(img);
+        usersOnline.appendChild(userDiv);
+        /*const br = document.createElement('br');
+        usersOnline.appendChild(br);*/
     });
 }
 
@@ -199,6 +210,7 @@ function displayFiles(bin){
 multimedia.addEventListener('change', (e)=>{
     const file = multimedia.files[0];
     
+    console.log(file);
     let bin = {
         username : userP.username,
         binary : '',

@@ -3,6 +3,8 @@ let alert = require('alert');
 const http = require('http');
 const express = require('express');
 const bcrypt = require('bcrypt');
+//const userModel = require('./models/userModelDb');
+const multer = require('multer');
 //const socketio = require('socket.io');
 const moment = require('moment'); //time library
 //Database connection
@@ -18,6 +20,7 @@ mongoose.connect('mongodb://localhost:27017/TEST', {
 
 const userFromDb = require('./models/userModelDb');
 const messagesFromDb = require('./models/messagesModelDb');
+/*const uploadModel = require('./models/imageModelDb');*/
 
 
 const app = express();
@@ -43,10 +46,22 @@ app.get('/', function(request, response) {
 	response.sendFile(path.join(__dirname + '/public/login.html'));
 });
 
-app.post('/register', function(request, response){
+const Storage = multer.diskStorage({
+    destination: "./public/uploads/",
+    filename:(req,file,cb)=>{
+        cb(null, file.fieldname+"_"+Date.now()+path.extname(file.originalname));
+    }
+});
+
+const upload = multer({
+    storage:Storage
+}).single('file');
+
+app.post('/register', upload, function(request, response){
     let username = request.body.username;
     let password = request.body.psw;
-
+    let image = request.body.file;
+    
 userFromDb.findOne({'username': username/*, 'password':password*/}, function(err, result){
         if(err){ console.log("Error with the database");};
         
@@ -54,12 +69,12 @@ userFromDb.findOne({'username': username/*, 'password':password*/}, function(err
             response.redirect('login.html');
         }
         else{
-            const userSavedInDb = new userFromDb({username:username, password:password});
+            const userSavedInDb = new userFromDb({username:username, password:password, image:image});
             userSavedInDb.save();
             response.redirect('login.html');
         }
     })
-})
+});
 
 app.post('/auth', function(request, response) {
     let username = request.body.username;
@@ -100,6 +115,7 @@ io.on('connection', socket => { //socket is a parameter
             username: usernameFromLogin,
             id: socket.id,
             room: "room"
+            /*image: user.image;*/
         };
 
         socket.on('userConnected', userConnected =>{
@@ -249,6 +265,10 @@ io.on('connection', socket => { //socket is a parameter
             console.log(bin.username);
             io.to(user.room).emit('file', bin);
         })
+
+        /*socket.on('profilePic', bin =>{
+            bin.t
+        })*/
 
         //listen for chat messages
         //here I receive the message from the client
