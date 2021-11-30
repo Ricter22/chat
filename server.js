@@ -9,9 +9,11 @@ const multer = require('multer');
 const moment = require('moment'); //time library
 //Database connection
 const mongoose = require('mongoose');
+
+//mongo or localhost
+mongoose.connect('mongodb://chat-db:27017/TEST', {
+    useNewUrlParser: true,
     
-mongoose.connect('mongodb://localhost:27017/TEST', {
-    useNewUrlParser: true
 }).then(()=>{
     console.log('Database connected...');
 }).catch(err=>{

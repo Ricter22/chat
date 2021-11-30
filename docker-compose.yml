@@ -1,0 +1,24 @@
+version: '3'
+services:
+  node:
+    image: melo:1.0
+    ports:
+      - 3000:3000
+    networks:
+      - chat
+    
+  mongo:
+    image: mongo
+    container_name: chat-db
+    ports:
+      - 27017:27017
+    volumes:
+      - chat-db:/data/db
+    networks:
+      - chat
+
+volumes:
+  chat-db:
+
+networks:
+  chat:
