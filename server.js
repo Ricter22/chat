@@ -10,7 +10,7 @@ const moment = require('moment'); //time library
 //Database connection
 const mongoose = require('mongoose');
 
-//mongo or localhost
+//chat-db or localhost
 mongoose.connect('mongodb://chat-db:27017/TEST', {
     useNewUrlParser: true,
     
@@ -83,13 +83,18 @@ app.post('/auth', function(request, response) {
     let password = request.body.password;
     let flag = false;
     console.log(username);
+    users.forEach( user => {
+        if (user.username == username){
+            flag = true;
+        }
+    })
 
     //here we search the username in the database, if we find it we search 
     //his encrypted password and compare it with the password that we receive from the post
     userFromDb.findOne({'username': username}, function(err, result){
         if(err){ console.log("Error with the database");};
-        
-        if(result==null){
+
+        if(result==null || flag){
             alert("Invalid username e/o password");
             response.redirect('login.html');
         }
