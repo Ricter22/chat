@@ -10,119 +10,156 @@ const moment = require('moment'); //time library
 //Database connection
 const mongoose = require('mongoose');
 
-//chat-db or localhost
-mongoose.connect('mongodb://chat-db:27017/TEST', {
-    useNewUrlParser: true,
-    
-}).then(()=>{
-    console.log('Database connected...');
-}).catch(err=>{
-    console.log(err);
-    })
+//clustering
+const cluster = require('cluster');
+const numCPUs = require("os").cpus().length;
+const { setupMaster, setupWorker } = require("@socket.io/sticky");
+const { createAdapter, setupPrimary } = require("@socket.io/cluster-adapter");
 
-const userFromDb = require('./models/userModelDb');
-const messagesFromDb = require('./models/messagesModelDb');
-/*const uploadModel = require('./models/imageModelDb');*/
+if (cluster.isMaster) {
+    console.log(`Master ${process.pid} is running`);
 
-
-const app = express();
-const server = http.createServer(app);
-//const io = socketio(server);
-const io = require("socket.io")(server, {
-    maxHttpBufferSize: 1e8,
-  });
-
-
-// Set static folder
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.urlencoded({extended : true}));
-app.use(express.json());
-
-//importing functions for managing users, messages and credentials
-const { users, newUserList, removedUserList, isInList} = require('./utils/users.js');
-const {Parsing} = require('./utils/mexParsing.js');
-
-let usernameFromLogin = '';
-
-app.get('/', function(request, response) {
-	response.sendFile(path.join(__dirname + '/public/login.html'));
-});
-
-const Storage = multer.diskStorage({
-    destination: "./public/uploads/",
-    filename:(req,file,cb)=>{
-        cb(null, file.fieldname+"_"+Date.now()+path.extname(file.originalname));
+    const httpServer = http.createServer();
+    // setup sticky sessions  
+    setupMaster(httpServer, {    loadBalancingMethod: "least-connection",  });
+    // setup connections between the workers  
+    setupPrimary();
+    // needed for packets containing buffers (you can ignore it if you only send plaintext objects)  // Node.js < 16.0.0  cluster.setupMaster({    serialization: "advanced",  });  // Node.js > 16.0.0  // cluster.setupPrimary({  //   serialization: "advanced",  // });
+    httpServer.listen(3000);
+    for (let i = 0; i < numCPUs; i++) {
+        cluster.fork();  
     }
-});
+    cluster.on("exit", (worker) => {
+        console.log(`Worker ${worker.process.pid} died`);
+        cluster.fork();
+    });
+} 
+else {  
+    console.log(`Worker ${process.pid} started`);
+    //const httpServer = http.createServer();
 
-const upload = multer({
-    storage:Storage
-}).single('file');
 
-app.post('/register', upload, function(request, response){
-    let username = request.body.username;
-    let password = request.body.psw;
-    let image = request.body.file;
-    
-userFromDb.findOne({'username': username/*, 'password':password*/}, function(err, result){
-        if(err){ console.log("Error with the database");};
+
+    //chat-db or localhost
+    mongoose.connect('mongodb://chat-db:27017/TEST', {
+        useNewUrlParser: true,
         
-        if(result!=null){
-            response.redirect('login.html');
-        }
-        else{
-            const userSavedInDb = new userFromDb({username:username, password:password, image:image});
-            userSavedInDb.save();
-            response.redirect('login.html');
-        }
-    })
-});
+    }).then(()=>{
+        console.log('Database connected...');
+    }).catch(err=>{
+        console.log(err);
+        })
 
-app.post('/auth', function(request, response) {
-    let username = request.body.username;
-    let password = request.body.password;
-    let flag = false;
-    console.log(username);
-    users.forEach( user => {
-        if (user.username == username){
-            flag = true;
-        }
-    })
-
-    //here we search the username in the database, if we find it we search 
-    //his encrypted password and compare it with the password that we receive from the post
-    userFromDb.findOne({'username': username}, function(err, result){
-        if(err){ console.log("Error with the database");};
-
-        if(result==null || flag){
-            alert("Invalid username e/o password");
-            response.redirect('login.html');
-        }
-        else{   
-            result.comparePassword(password, function(err, isMatch) {
-                if (err) throw err;
-                //console.log(password, isMatch);
-                if (isMatch){
-                    usernameFromLogin = username;
-                    response.redirect('homePage.html');
-                }else{
-                    alert("Invalid username e/o password");
-                    response.redirect('login.html');
-                }
-            });
-        }
-    })
-});
+    const userFromDb = require('./models/userModelDb');
+    const messagesFromDb = require('./models/messagesModelDb');
+    /*const uploadModel = require('./models/imageModelDb');*/
 
 
-// Run when client connects
-io.on('connection', socket => { //socket is a parameter    
+    const app = express();
+    const server = http.createServer(app);
+
+    // Set static folder
+    app.use(express.static(path.join(__dirname, 'public')));
+    app.use(express.urlencoded({extended : true}));
+    app.use(express.json());
+
+    //importing functions for managing users, messages and credentials
+    const { users, newUserList, removedUserList, isInList} = require('./utils/users.js');
+    const {Parsing} = require('./utils/mexParsing.js');
+
+    let usernameFromLogin = '';
+
+    app.get('/', function(request, response) {
+        response.sendFile(path.join(__dirname + '/public/login.html'));
+    });
+
+    const Storage = multer.diskStorage({
+        destination: "./public/uploads/",
+        filename:(req,file,cb)=>{
+            cb(null, file.fieldname+"_"+Date.now()+path.extname(file.originalname));
+        }
+    });
+
+    const upload = multer({
+        storage:Storage
+    }).single('file');
+
+    app.post('/register', upload, function(request, response){
+        let username = request.body.username;
+        let password = request.body.psw;
+        let image = request.body.file;
+        
+    userFromDb.findOne({'username': username/*, 'password':password*/}, function(err, result){
+            if(err){ console.log("Error with the database");};
+            
+            if(result!=null){
+                response.redirect('login.html');
+            }
+            else{
+                const userSavedInDb = new userFromDb({username:username, password:password, image:image});
+                userSavedInDb.save();
+                response.redirect('login.html');
+            }
+        })
+    });
+
+    app.post('/auth', function(request, response) {
+        let username = request.body.username;
+        let password = request.body.password;
+        let flag = false;
+        console.log(username);
+        users.forEach( user => {
+            if (user.username == username){
+                flag = true;
+            }
+        })
+
+        //here we search the username in the database, if we find it we search 
+        //his encrypted password and compare it with the password that we receive from the post
+        userFromDb.findOne({'username': username}, function(err, result){
+            if(err){ console.log("Error with the database");};
+
+            if(result==null || flag){
+                alert("Invalid username e/o password");
+                response.redirect('login.html');
+            }
+            else{   
+                result.comparePassword(password, function(err, isMatch) {
+                    if (err) throw err;
+                    //console.log(password, isMatch);
+                    if (isMatch){
+                        usernameFromLogin = username;
+                        response.redirect('homePage.html');
+                    }else{
+                        alert("Invalid username e/o password");
+                        response.redirect('login.html');
+                    }
+                });
+            }
+        })
+    });
+
+
+
+
+    const io = require("socket.io")(server, {
+        maxHttpBufferSize: 1e8,
+    });
+    //const io = new Server(httpServer);
+    // use the cluster adapter  
+    io.adapter(createAdapter());
+    // setup connection with the primary process  
+    setupWorker(io);
+
+
+
+    io.on('connection', socket => { //socket is a parameter    
 
         const user = {
             username: usernameFromLogin,
             id: socket.id,
-            room: "room"
-            /*image: user.image;*/
+            room: "room",
+            pid: process.pid
         };
 
         socket.on('userConnected', userConnected =>{
@@ -311,7 +348,6 @@ io.on('connection', socket => { //socket is a parameter
             
         });
     
-});
+    });
+}
 
-const PORT = 3000 || process.env.PORT;
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`));

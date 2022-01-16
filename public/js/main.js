@@ -11,6 +11,8 @@ const socket = io({
     'reconnectionDelay': 1000,
     'reconnectionDelayMax' : 5000,
     'reconnectionAttempts': 5,
+    //the following line allow us to don't use sticky session
+    transports: [ "websocket" ]
 });
 
 let userP = {username:'', id:'', room:''};
@@ -40,7 +42,7 @@ socket.on('userProperties', user =>{
     userP.id = user.id;
     userP.room = user.room;
     userP.image = user.image;
-    console.log(userP.room);
+    alert(user.pid);
 })
 
 //receiving the update list of online users
