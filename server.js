@@ -84,23 +84,23 @@ else {
         storage:Storage
     }).single('file');
 
-    app.post('/register', upload, function(request, response){
+    app.post('/register', function(request, response){
         let username = request.body.username;
-        let password = request.body.psw;
-        let image = request.body.file;
+        let password = request.body.password;
+        //let image = request.body.file;
         
-    userFromDb.findOne({'username': username/*, 'password':password*/}, function(err, result){
-            if(err){ console.log("Error with the database");};
-            
-            if(result!=null){
-                response.redirect('login.html');
-            }
-            else{
-                const userSavedInDb = new userFromDb({username:username, password:password, image:image});
-                userSavedInDb.save();
-                response.redirect('login.html');
-            }
-        })
+        userFromDb.findOne({'username': username/*, 'password':password*/}, function(err, result){
+                if(err){ console.log("Error with the database");};
+                
+                if(result!=null){
+                    return response.status(422).send({'msg':'user already registered'});
+                }
+                else{
+                    const userSavedInDb = new userFromDb({username:username, password:password/*, image:image*/});
+                    userSavedInDb.save();
+                    response.status(200).send({'msg':'succesful'});
+                }
+            })
     });
 
     app.post('/auth', function(request, response) {
@@ -129,10 +129,10 @@ else {
                     //console.log(password, isMatch);
                     if (isMatch){
                         usernameFromLogin = username;
-                        response.redirect('homePage.html');
+                        response.status(200).send({'msg':'user signed in'});
                     }else{
                         alert("Invalid username e/o password");
-                        response.redirect('login.html');
+                        return response.status(422).send({'msg':'error'});
                     }
                 });
             }

@@ -1,6 +1,6 @@
 
 function check(){
-    fetch('http://localhost:8080/auth', {
+    fetch('http://localhost:3000/auth', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',

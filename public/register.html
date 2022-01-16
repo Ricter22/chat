@@ -13,7 +13,7 @@
 </head>
 
 <body>
-    <form action="register" method="post" enctype="multipart/form-data">
+    <div >
         <div class="container">
             <h1>Register</h1>
             <p>Please fill in this form to register as a user of the MELO Chat Server.</p>
@@ -26,22 +26,24 @@
             <input type="password" placeholder="Enter Password" name="psw" id="psw" required>
 
             <label for="psw-repeat"><b>Repeat Password</b></label>
-            <input type="password" placeholder="Repeat Password" name="psw-repeat" id="psw-repeat" required oninput="checkRepeat(this)">
+            <input type="password" placeholder="Repeat Password" name="psw-repeat" id="psw-repeat" required
+                oninput="checkPswRepeat(this)">
             <label for="profile-input" id="profile-label"> <b>Profile pic: </b></label>
             <input type="file" id="profile-pic" name="file">
             <hr>
             <p>By creating an account you agree to our <a href="#">Terms & Privacy</a>.</p>
 
-            <button type="submit" class="registerbtn">Register</button>
+            <button onclick="check()" class="registerbtn">Register</button>
+            
         </div>
 
         <div class="container signin">
             <p>Already have an account? <a href="login.html">Sign in</a>.</p>
         </div>
-    </form>
+    </div>
 
     <script language='javascript' type='text/javascript'>
-        function checkRepeat(input) {
+        function checkPswRepeat(input) {
             if (input.value != document.getElementById('psw').value) {
                 input.setCustomValidity('Password must be matching.');
             } else {
@@ -50,6 +52,8 @@
             }
         }
     </script>
-    <script type="text/javascript" src="js/log.js"></script>
+
+<script type="text/javascript" src="js/register.js"></script>
+
 
 </body>
