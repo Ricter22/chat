@@ -41,7 +41,7 @@ else {
 
 
     //chat-db or localhost
-    mongoose.connect('mongodb://chat-db:27017/TEST', {
+    mongoose.connect('mongodb://localhost:27017/TEST', {
         useNewUrlParser: true,
         
     }).then(()=>{
@@ -120,8 +120,7 @@ else {
             if(err){ console.log("Error with the database");};
 
             if(result==null || flag){
-                alert("Invalid username e/o password");
-                response.redirect('login.html');
+                return response.status(422).send({'msg':'error'});
             }
             else{   
                 result.comparePassword(password, function(err, isMatch) {
@@ -131,7 +130,6 @@ else {
                         usernameFromLogin = username;
                         response.status(200).send({'msg':'user signed in'});
                     }else{
-                        alert("Invalid username e/o password");
                         return response.status(422).send({'msg':'error'});
                     }
                 });
