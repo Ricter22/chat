@@ -42,18 +42,17 @@ socket.on('userProperties', user =>{
     userP.id = user.id;
     userP.room = user.room;
     userP.image = user.image;
-    alert(user.pid);
+    console.log(user.username + " on: " + user.pid);
 })
 
 //receiving the update list of online users
 socket.on('user', users => {
-    //creating the li objects for the ul
+
     outPutUsername(users);
 })
 
 //listening for a message from the server
 socket.on('message', (msg) => {
-    console.log(msg.countries);
     outPut(msg);
     
     //scroll down the message list
@@ -75,6 +74,7 @@ roomsOnline.addEventListener('click', (e)=>{
     document.querySelector('.messages').innerHTML="";
 })
 
+//
 //Adding a listener to the users list, so when you click on a user
 //displayed, you'll be able to send a private message to him grabbing
 //the id
@@ -99,7 +99,7 @@ socket.on('privConnection', msg =>{
 })
 
 socket.on("oldMessages", result =>{
-    console.log(result);
+    
     result.forEach(message => {
         outPut(message);
     })
@@ -137,7 +137,6 @@ function outPutUsername(users){
         userDiv.appendChild(btn);
         const img = document.createElement("img");
         img.height = "25"; img.width = "25";
-        console.log(user.image);
         if(user.image){
             img.src = user.image; 
         }else {

@@ -128,6 +128,9 @@ else {
                     //console.log(password, isMatch);
                     if (isMatch){
                         usernameFromLogin = username;
+                        userFromDb.updateOne({username: username}, {state:true}, function(err, result){
+                            if (err) { console.log(err)}
+                        })
                         response.status(200).send({'msg':'user signed in'});
                     }else{
                         return response.status(422).send({'msg':'error'});
@@ -157,11 +160,13 @@ else {
             username: usernameFromLogin,
             id: socket.id,
             room: "room",
-            pid: process.pid
+            pid: process.pid,
+            state:true
         };
 
         socket.on('userConnected', userConnected =>{
             user.username = userConnected.username;
+            user.state = true;
             socket.emit('userProperties', user);
             io.emit('user', users);
             /*newUserList(user);
@@ -183,7 +188,10 @@ else {
         //adding the new user to the list 
         //and emitting the updated list to client
         newUserList(user);
-        io.emit('user', users);
+        userFromDb.find({state:true}, function(err, result){
+            console.log(result);
+            io.emit('user', result);
+        })
 
         //Welcome current user
         socket.emit('message', msg={
@@ -340,9 +348,15 @@ else {
             });
 
             //updating the list and sending it back to client
-            removedUserList(user);
-            io.emit('user', users);
-
+            userFromDb.updateOne({"username": user.username}, {"state":false}, function(err, result){
+                if (err) { console.log(err)}
+            })
+            userFromDb.find({state:true}, function(err, result){
+                console.log(result);
+                console.log(user.username + ' left');
+                io.emit('user', result);
+                removedUserList(user);
+            })
             
         });
     

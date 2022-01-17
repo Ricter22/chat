@@ -4,7 +4,8 @@ const bcrypt = require('bcrypt');
 const UserSchema = new mongoose.Schema({
   username: String,
   password: String,
-  image: String
+  image: String,
+  state: Boolean
   /*img:{
     data: Buffer,
     contentType: String
