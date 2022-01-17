@@ -41,7 +41,7 @@ else {
 
 
     //chat-db or localhost
-    mongoose.connect('mongodb://localhost:27017/TEST', {
+    mongoose.connect('mongodb://chat-db:27017/TEST', {
         useNewUrlParser: true,
         
     }).then(()=>{
